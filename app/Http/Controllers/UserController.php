@@ -38,12 +38,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user = new User();
-        
-        $user->save();
-
-        return new UserResource($user);
-    
+        //
     }
 
     /**
