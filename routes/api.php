@@ -12,18 +12,12 @@
 |
 */
 
-Route::group(['middleware' => 'cors', 'prefix' => '/v1'], function () {
-    Route::post('/login', 'UserController@authenticate');
-    Route::post('/register', 'UserController@register');
-    Route::get('/logout/{api_token}', 'UserController@logout');
-});
+Route::get('users', 'UserController@index');
 
-Route::get('groups', 'GroupController@index');
+Route::get('user/{id}', 'UserController@show');
 
-Route::get('group/{id}', 'GroupController@show');
+Route::post('user', 'UserController@store');
 
-Route::post('group', 'GroupController@store');
+Route::put('user/{id}', 'UserController@update');
 
-Route::put('group/{id}', 'GroupController@update');
-
-Route::delete('group/{id}', 'GroupController@destroy');
+Route::delete('user/{id}', 'UserController@destroy');
