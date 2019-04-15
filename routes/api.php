@@ -27,3 +27,15 @@ Route::post('group', 'GroupController@store');
 Route::put('group/{id}', 'GroupController@update');
 
 Route::delete('group/{id}', 'GroupController@destroy');
+
+// users
+
+Route::get('users', 'UserController@index');
+
+Route::get('user/{id}', 'UserController@show');
+
+Route::post('user', 'UserController@store');
+
+Route::put('user/{id}', 'UserController@update');
+
+Route::delete('user/{id}', 'UserController@destroy');
