@@ -16,7 +16,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-  
+
         return new UserResource($users);
     }
 
@@ -38,7 +38,11 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = $request->all();
+
+        $isCreated = User::create($user);
+
+        return $isCreated;
     }
 
     /**
@@ -49,7 +53,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::find($id);
+
+        return new UserResource($user);
     }
 
     /**
@@ -72,7 +78,18 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::find($request->id);
+
+        $data = $request->all();
+
+        $user->name = $data['name'];
+        $user->email = $data['email'];
+        $user->status = $data['status'];
+        $user->password = bcrypt($data['password']);
+        $user->group_id = $data['group_id'];
+        $user->save();
+
+        return new UserResource($user);
     }
 
     /**
