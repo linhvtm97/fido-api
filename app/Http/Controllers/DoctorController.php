@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Resources\UserResource;
-use App\User;
+use App\Doctor;
+use App\Http\Resources\DoctorResource;
 
-class UserController extends Controller
+class DoctorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return new UserResource(User::paginate());
+        return new DoctorResource(Doctor::paginate());
     }
 
     /**
@@ -36,10 +36,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-        $data['password'] = bcrypt($data['password']);
-        $user = User::create($data);
-        return new UserResource($user);
+        $doctor = Doctor::create($request->all());
+        return new DoctorResource($doctor);
     }
 
     /**
@@ -50,8 +48,8 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
-        return new UserResource($user);
+        $doctor = Doctor::findOrFail($id);
+        return new DoctorResource($doctor);
     }
 
     /**
@@ -74,11 +72,10 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $userUpdate = $request->all();
-        $user = User::find($id);
-        $user->update($userUpdate);
-
-        return new UserResource($user);
+        $doctorUpdated = $request->all();
+        $doctor=Doctor::findOrFail($id);
+        $doctor->update($doctorUpdated);
+        return new DoctorResource($doctor);
     }
 
     /**
@@ -89,6 +86,6 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        User::find($id)->delete();
+        Doctor::delete(Doctor::findOrFail($id));
     }
 }
