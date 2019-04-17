@@ -37,7 +37,13 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+
+        $data['password'] = bcrypt($data['password']);
+
+        $user = User::create($data);
+
+        return new UserResource($user);
     }
 
     /**
@@ -75,13 +81,11 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->status = $request->status;
-        $user->password = bcrypt($request->password);
-        $user->user_active_check = $request->user_active_check;
+        $data = $request->all();
 
-        $user->save();
+        $data['password'] = bcrypt($data['password']);
+
+        $user->save($data);
 
         return new UserResource($user);
     }

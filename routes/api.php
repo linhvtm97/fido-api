@@ -20,22 +20,22 @@ Route::group(['middleware' => 'cors', 'prefix' => '/v1'], function () {
 
 Route::get('groups', 'GroupController@index');
 
-Route::get('group/{id}', 'GroupController@show');
+Route::get('groups/{id}', 'GroupController@show');
 
-Route::post('group', 'GroupController@store');
+Route::post('groups', 'GroupController@store');
 
-Route::put('group/{id}', 'GroupController@update');
+Route::put('groups/{id}', 'GroupController@update');
 
-Route::delete('group/{id}', 'GroupController@destroy');
+Route::delete('groups/{id}', 'GroupController@destroy');
 
 // users
 
 Route::get('users', 'UserController@index');
 
-Route::get('user/{id}', 'UserController@show');
+Route::get('users/{id}', 'UserController@show');
 
-Route::post('user', 'UserController@store');
+Route::post('users', 'UserController@store');
 
-Route::put('user/{id}', 'UserController@update');
+Route::put('users/{id}', 'UserController@update');
 
-Route::delete('user/{id}', 'UserController@destroy');
+Route::delete('users/{id}', 'UserController@destroy');
