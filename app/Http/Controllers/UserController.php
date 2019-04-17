@@ -38,11 +38,8 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-
         $data['password'] = bcrypt($data['password']);
-
         $user = User::create($data);
-
         return new UserResource($user);
     }
 
@@ -55,7 +52,6 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::find($id);
-
         return new UserResource($user);
     }
 
@@ -79,13 +75,9 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id);
-
-        $data = $request->all();
-
-        $data['password'] = bcrypt($data['password']);
-
-        $user->save($data);
+        $userUpdate = $request->all();
+        $user = User::find($id);
+        $user->update($userUpdate);
 
         return new UserResource($user);
     }
@@ -98,6 +90,6 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        User::find($id)->delete();
     }
 }
