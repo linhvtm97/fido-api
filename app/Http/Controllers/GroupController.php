@@ -6,6 +6,13 @@ use Illuminate\Http\Request;
 use App\Group;
 use App\Http\Resources\GroupResource;
 use App\Http\Resources\MyCollection;
+use App\Library\MyResponse;
+use Validator;
+use App\Library\MyValidation;
+
+define('ERROR', 1);
+define('SUCCESS', 0);
+
 
 class GroupController extends Controller
 {
@@ -37,6 +44,12 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), MyValidation::$ruleGroup, MyValidation::$messageUser);
+
+        if ($validator->fails()) {
+            $message = $validator->messages()->getMessages();
+            return [new MyResponse(ERROR, $message)];
+        }
         $group = new Group();
         $group->name = $request->input('name');
         $group->description = $request->input('description');
@@ -84,13 +97,12 @@ class GroupController extends Controller
     {
 
         $group = Group::find($id);
-        $group->name = $request->input('name');
-        $group->description = $request->input('description');
-        $group->status = $request->input('status');
-
-        $group->save();
-
-        return new GroupResource($group);
+        if ($group) {
+            $groupUpdated = $request->all();
+            $group->update($groupUpdated);
+            return new GroupResource($group);
+        }
+        return [new MyResponse(ERROR, "Can not find id")];
     }
 
     /**
@@ -101,11 +113,11 @@ class GroupController extends Controller
      */
     public function destroy($id)
     {
-        $group = Group::findOrfail($id);
-        if ($group->delete()) {
-
+        $group = Group::find($id);
+        if ($group) {
+            $group->delete();
             return "Deleted";
         }
-        return "Error while deleting";
+        return "ID not found";
     }
 }

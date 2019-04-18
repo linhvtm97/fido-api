@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Doctor;
 use App\Http\Resources\DoctorResource;
 use App\Http\Resources\MyCollection;
+use App\Library\MyValidation;
 
 class DoctorController extends Controller
 {
@@ -38,7 +39,10 @@ class DoctorController extends Controller
     public function store(Request $request)
     {
         $doctor = Doctor::create($request->all());
-        return new DoctorResource($doctor);
+        if($doctor){
+            return new DoctorResource($doctor);
+        }
+        return [new MyValidation(ERROR, "Can not create")];
     }
 
     /**
@@ -73,10 +77,13 @@ class DoctorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $doctorUpdated = $request->all();
-        $doctor=Doctor::findOrFail($id);
-        $doctor->update($doctorUpdated);
-        return new DoctorResource($doctor);
+        $doctor = Doctor::find($id);
+        if ($doctor) {
+            $doctorUpdated = $request->all();
+            $doctor->update($doctorUpdated);
+            return new DoctorResource($doctor);
+        }
+        return [new MyResponse(ERROR, "Can not find id")];
     }
 
     /**
@@ -87,11 +94,11 @@ class DoctorController extends Controller
      */
     public function destroy($id)
     {
-        $doctor = Doctor::findOrfail($id);
-        if ($doctor->delete()) {
-
+        $doctor = Doctor::find($id);
+        if ($doctor) {
+            $doctor->delete();
             return "Deleted";
         }
-        return "Error while deleting";
+        return "ID not found";
     }
 }
