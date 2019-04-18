@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Group;
-use App\Http\Resources\GroupResource;
+use App\Doctor;
+use App\Http\Resources\DoctorResource;
 use App\Http\Resources\MyCollection;
 
-class GroupController extends Controller
+class DoctorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class GroupController extends Controller
      */
     public function index()
     {
-        return new MyCollection(Group::paginate());
+        return new MyCollection(Doctor::paginate());
     }
 
     /**
@@ -37,13 +37,8 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
-        $group = new Group();
-        $group->name = $request->input('name');
-        $group->description = $request->input('description');
-        $group->status = $request->input('status');
-        $group->save();
-
-        return new GroupResource($group);
+        $doctor = Doctor::create($request->all());
+        return new DoctorResource($doctor);
     }
 
     /**
@@ -54,12 +49,8 @@ class GroupController extends Controller
      */
     public function show($id)
     {
-        $group = Group::find($id);
-        if ($group) {
-            return new GroupResource($group);
-        }
-
-        return "Group Not found"; // temporary error
+        $doctor = Doctor::findOrFail($id);
+        return new DoctorResource($doctor);
     }
 
     /**
@@ -82,15 +73,10 @@ class GroupController extends Controller
      */
     public function update(Request $request, $id)
     {
-
-        $group = Group::find($id);
-        $group->name = $request->input('name');
-        $group->description = $request->input('description');
-        $group->status = $request->input('status');
-
-        $group->save();
-
-        return new GroupResource($group);
+        $doctorUpdated = $request->all();
+        $doctor=Doctor::findOrFail($id);
+        $doctor->update($doctorUpdated);
+        return new DoctorResource($doctor);
     }
 
     /**
@@ -101,8 +87,8 @@ class GroupController extends Controller
      */
     public function destroy($id)
     {
-        $group = Group::findOrfail($id);
-        if ($group->delete()) {
+        $doctor = Doctor::findOrfail($id);
+        if ($doctor->delete()) {
 
             return "Deleted";
         }

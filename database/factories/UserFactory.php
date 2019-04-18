@@ -1,8 +1,9 @@
 <?php
 
-use App\User;
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
+use App\Doctor;
+use Illuminate\Support\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,12 +16,26 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(User::class, function (Faker $faker) {
+$factory->define(Doctor::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'email_verified_at' => now(),
-        'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-        'remember_token' => Str::random(10),
+        'status' => 'offline',
+        'doctor_no' => 'BS'. $faker->numberBetween(1000, 9999),
+        'avatar' => $faker->text,
+        'birthday' => $faker->date($format = 'Y-m-d', $max = 'now'),
+        'gender' => 'Male',
+        'id_number' => $faker->numberBetween(10000000, 99999999),
+        'id_number_place' => $faker->address,
+        'id_number_date' => $faker->date($format = 'Y-m-d', $max = 'now'),
+        'passport_no' => $faker->numberBetween(100000000, 99999999),
+        'passport_place' => $faker->address,
+        'passport_date' => $faker->date($format = 'Y-m-d', $max = 'now'),
+        'phone_no_1' => $faker->numberBetween(11111111,999999),
+        'phone_no_2' => $faker->numberBetween(11111111,999999),
+        'fk_address_id' => $faker->numberBetween(0,20),
+        'fk_employee_id' => $faker->numberBetween(0,20),
+        'hospital_name' => 'BV' .$faker->text($max =100),
+        'specialist' => $faker->text($max=100),
+        'email' =>$faker->email,
     ];
 });

@@ -11,7 +11,7 @@ class User extends Model
         'name', 'email', 'group_id', 'status', 'user_active_check', 'password'
     ];
 
-    protected $hidden = ['password',];
+    protected $hidden = ['password', 'created_at', 'updated_at'];
 
     public function groups()
     {

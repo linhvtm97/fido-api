@@ -39,3 +39,16 @@ Route::post('users', 'UserController@store');
 Route::put('users/{id}', 'UserController@update');
 
 Route::delete('users/{id}', 'UserController@destroy');
+
+
+// doctors
+
+Route::get('doctors', 'DoctorController@index');
+
+Route::get('doctors/{id}', 'DoctorController@show');
+
+Route::post('doctors', 'DoctorController@store');
+
+Route::put('doctors/{id}', 'DoctorController@update');
+
+Route::delete('doctors/{id}', 'DoctorController@destroy');
