@@ -12,30 +12,49 @@
 |
 */
 
-Route::group(['middleware' => 'cors', 'prefix' => '/v1'], function () {
-    Route::post('/login', 'UserController@authenticate');
-    Route::post('/register', 'UserController@register');
-    Route::get('/logout/{api_token}', 'UserController@logout');
+Route::group(['middleware' => 'api:cors'], function () {
+
+    Route::post('/signin', 'UserController@signin');
+
+    Route::post('/signup', 'UserController@signup');
+
+    Route::post('/signout', 'UserController@signout');
 });
 
-Route::get('groups', 'GroupController@index');
+Route::prefix('groups')->group(function () {
+    Route::get('/', 'GroupController@index');
 
-Route::get('groups/{id}', 'GroupController@show');
+    Route::get('/{id}', 'GroupController@show');
 
-Route::post('groups', 'GroupController@store');
+    Route::post('/', 'GroupController@store');
 
-Route::put('groups/{id}', 'GroupController@update');
+    Route::put('/{id}', 'GroupController@update');
 
-Route::delete('groups/{id}', 'GroupController@destroy');
+    Route::delete('/{id}', 'GroupController@destroy');
+});
 
-// users
+Route::prefix('users')->group(function () {
+    Route::get('/', 'UserController@index');
 
-Route::get('users', 'UserController@index');
+    Route::get('/{id}', 'UserController@show');
 
-Route::get('users/{id}', 'UserController@show');
+    Route::post('/', 'UserController@store');
 
-Route::post('users', 'UserController@store');
+    Route::put('/{id}', 'UserController@update');
 
-Route::put('users/{id}', 'UserController@update');
+    Route::delete('/{id}', 'UserController@destroy');
+});
 
-Route::delete('users/{id}', 'UserController@destroy');
+Route::prefix('doctors')->group(function () {
+    Route::get('/', 'DoctorController@index');
+
+    Route::get('/{id}', 'DoctorController@show');
+
+    Route::post('/', 'DoctorController@store');
+
+    Route::put('/{id}', 'DoctorController@update');
+
+    Route::delete('/{id}', 'DoctorController@destroy');
+});
+
+Auth::routes();
