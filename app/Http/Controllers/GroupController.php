@@ -10,8 +10,8 @@ use App\Library\MyResponse;
 use Validator;
 use App\Library\MyValidation;
 
-define('ERROR', 1);
-define('SUCCESS', 0);
+// define('ERROR', 1);
+// define('SUCCESS', 0);
 
 
 class GroupController extends Controller
