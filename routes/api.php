@@ -12,7 +12,7 @@
 |
 */
 
-Route::group(['middleware' => 'api:cors'], function () {
+Route::group(['middleware' => 'cors'], function () {
 
     Route::post('/signin', 'UserController@signin');
 
