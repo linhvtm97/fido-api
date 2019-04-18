@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Group;
 use App\Http\Resources\GroupResource;
+use App\Http\Resources\MyCollection;
 
 class GroupController extends Controller
 {
@@ -15,7 +16,7 @@ class GroupController extends Controller
      */
     public function index()
     {
-        return new GroupResource(Group::paginate());
+        return new MyCollection(Group::paginate());
     }
 
     /**
@@ -37,13 +38,9 @@ class GroupController extends Controller
     public function store(Request $request)
     {
         $group = new Group();
-
         $group->name = $request->input('name');
-
         $group->description = $request->input('description');
-
         $group->status = $request->input('status');
-
         $group->save();
 
         return new GroupResource($group);
@@ -57,11 +54,9 @@ class GroupController extends Controller
      */
     public function show($id)
     {
-        $article = Group::find($id); //id comes from route
-
-        if ($article) {
-
-            return new GroupResource($article);
+        $group = Group::find($id);
+        if ($group) {
+            return new GroupResource($group);
         }
 
         return "Group Not found"; // temporary error
@@ -89,11 +84,8 @@ class GroupController extends Controller
     {
 
         $group = Group::find($id);
-
         $group->name = $request->input('name');
-
-        $group->descriptiop = $request->input('description');
-
+        $group->description = $request->input('description');
         $group->status = $request->input('status');
 
         $group->save();
@@ -110,12 +102,10 @@ class GroupController extends Controller
     public function destroy($id)
     {
         $group = Group::findOrfail($id);
-
         if ($group->delete()) {
 
-            return  new GroupResource($group);
+            return "Deleted";
         }
-
         return "Error while deleting";
     }
 }

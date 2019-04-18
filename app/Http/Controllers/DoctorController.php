@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Doctor;
 use App\Http\Resources\DoctorResource;
+use App\Http\Resources\MyCollection;
 
 class DoctorController extends Controller
 {
@@ -15,7 +16,7 @@ class DoctorController extends Controller
      */
     public function index()
     {
-        return new DoctorResource(Doctor::paginate());
+        return new MyCollection(Doctor::paginate());
     }
 
     /**
@@ -86,6 +87,11 @@ class DoctorController extends Controller
      */
     public function destroy($id)
     {
-        Doctor::delete(Doctor::findOrFail($id));
+        $doctor = Doctor::findOrfail($id);
+        if ($doctor->delete()) {
+
+            return "Deleted";
+        }
+        return "Error while deleting";
     }
 }

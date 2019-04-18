@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use App\User;
+use App\Http\Resources\MyCollection;
 
 class UserController extends Controller
 {
@@ -15,7 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return new UserResource(User::paginate());
+        return new MyCollection(User::paginate());
     }
 
     /**
@@ -51,7 +52,11 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::find($id);
-        return new UserResource($user);
+        if ($user) {
+            return new UserResource($user);
+        }
+
+        return "User Not found"; // temporary error
     }
 
     /**
@@ -89,6 +94,11 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        User::find($id)->delete();
+        $user = User::findOrfail($id);
+        if ($user->delete()) {
+
+            return "Deleted";
+        }
+        return "Error while deleting";
     }
 }
