@@ -2,17 +2,17 @@
 
 namespace App\Library;
 
-class UserResponse
+class MyResponse
 {
     public $status;
     public $message;
-    public $user;
+    public $object;
 
-    public function __construct($s, $m, $user = null)
+    public function __construct($s, $m, $object = null)
     {
         $this->status = $s;
         $this->message = $m;
-        $this->user = $user;
+        $this->object = $object;
     }
 
 }

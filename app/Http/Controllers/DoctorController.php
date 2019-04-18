@@ -3,18 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Group;
-use App\Http\Resources\GroupResource;
+use App\Doctor;
+use App\Http\Resources\DoctorResource;
 use App\Http\Resources\MyCollection;
-use App\Library\MyResponse;
-use Validator;
 use App\Library\MyValidation;
 
-define('ERROR', 1);
-define('SUCCESS', 0);
-
-
-class GroupController extends Controller
+class DoctorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,7 +17,7 @@ class GroupController extends Controller
      */
     public function index()
     {
-        return new MyCollection(Group::paginate());
+        return new MyCollection(Doctor::paginate());
     }
 
     /**
@@ -44,19 +38,11 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), MyValidation::$ruleGroup, MyValidation::$messageUser);
-
-        if ($validator->fails()) {
-            $message = $validator->messages()->getMessages();
-            return [new MyResponse(ERROR, $message)];
+        $doctor = Doctor::create($request->all());
+        if($doctor){
+            return new DoctorResource($doctor);
         }
-        $group = new Group();
-        $group->name = $request->input('name');
-        $group->description = $request->input('description');
-        $group->status = $request->input('status');
-        $group->save();
-
-        return new GroupResource($group);
+        return [new MyValidation(ERROR, "Can not create")];
     }
 
     /**
@@ -67,12 +53,8 @@ class GroupController extends Controller
      */
     public function show($id)
     {
-        $group = Group::find($id);
-        if ($group) {
-            return new GroupResource($group);
-        }
-
-        return "Group Not found"; // temporary error
+        $doctor = Doctor::findOrFail($id);
+        return new DoctorResource($doctor);
     }
 
     /**
@@ -95,12 +77,11 @@ class GroupController extends Controller
      */
     public function update(Request $request, $id)
     {
-
-        $group = Group::find($id);
-        if ($group) {
-            $groupUpdated = $request->all();
-            $group->update($groupUpdated);
-            return new GroupResource($group);
+        $doctor = Doctor::find($id);
+        if ($doctor) {
+            $doctorUpdated = $request->all();
+            $doctor->update($doctorUpdated);
+            return new DoctorResource($doctor);
         }
         return [new MyResponse(ERROR, "Can not find id")];
     }
@@ -113,9 +94,9 @@ class GroupController extends Controller
      */
     public function destroy($id)
     {
-        $group = Group::find($id);
-        if ($group) {
-            $group->delete();
+        $doctor = Doctor::find($id);
+        if ($doctor) {
+            $doctor->delete();
             return "Deleted";
         }
         return "ID not found";

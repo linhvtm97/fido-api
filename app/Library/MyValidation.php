@@ -1,5 +1,5 @@
 <?php
-namespace App\Libray;
+namespace App\Library;
 
 class MyValidation
 {
@@ -10,6 +10,10 @@ class MyValidation
         'email' => 'required|email|unique:users,email',
         'password' => 'required|alpha_num|min:8|max:20',
         'rePassword' => 'same:password',
+    );
+
+    public static $ruleGroup = array(
+        'name' => 'required|unique:groups',
     );
 
     public static $messageUser = array(
