@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Doctor;
+use Validator;
 use App\Http\Resources\DoctorResource;
 use App\Http\Resources\MyCollection;
 use App\Library\MyValidation;
@@ -38,11 +39,16 @@ class DoctorController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), MyValidation::$ruleDoctor, MyValidation::$messageDoctor);
+
+        if ($validator->fails()) {
+            $message = $validator->messages()->getMessages();
+            return response()->json([$message], 401);    
+        }
         $doctor = Doctor::create($request->all());
         if($doctor){
             return new DoctorResource($doctor);
         }
-        return [new MyValidation(ERROR, "Can not create")];
     }
 
     /**
@@ -53,8 +59,11 @@ class DoctorController extends Controller
      */
     public function show($id)
     {
-        $doctor = Doctor::findOrFail($id);
-        return new DoctorResource($doctor);
+        $doctor = Doctor::find($id);
+        if ($doctor) {
+            return new DoctorResource($user);
+        }
+        return response()->json(['error' => 'ID not found']);   
     }
 
     /**
@@ -83,7 +92,7 @@ class DoctorController extends Controller
             $doctor->update($doctorUpdated);
             return new DoctorResource($doctor);
         }
-        return [new MyResponse(ERROR, "Can not find id")];
+        return response()->json(['error' => 'ID not found']);   
     }
 
     /**
@@ -97,8 +106,8 @@ class DoctorController extends Controller
         $doctor = Doctor::find($id);
         if ($doctor) {
             $doctor->delete();
-            return "Deleted";
+            return response()->json(['message' => 'Deleted']);   
         }
-        return "ID not found";
+        return response()->json(['error' => 'ID not found']);   
     }
 }
