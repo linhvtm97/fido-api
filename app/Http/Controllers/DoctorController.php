@@ -17,7 +17,7 @@ class DoctorController extends Controller
      */
     public function index()
     {
-        return new MyCollection(Doctor::paginate());
+        return new MyCollection(Doctor::all());
     }
 
     /**

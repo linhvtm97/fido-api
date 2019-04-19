@@ -79,7 +79,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return new MyCollection(User::paginate());
+        return new MyCollection(User::all());
     }
 
     /**

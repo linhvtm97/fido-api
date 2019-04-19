@@ -23,7 +23,7 @@ class GroupController extends Controller
      */
     public function index()
     {
-        return new MyCollection(Group::paginate());
+        return new MyCollection(Group::all());
     }
 
     /**
