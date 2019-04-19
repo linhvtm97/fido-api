@@ -26,6 +26,19 @@ class MyValidation
         
     );
 
+    public static $ruleEmployee = array(
+        'name' => 'required',
+        'employee_no' => 'required|unique:employees',
+        'id_number' => 'required|unique:employees',
+        'email' => 'required|unique:employees',
+        
+    );
+    public static $rulePatient = array(
+        'name' => 'required',
+        'id_number' => 'required|unique:patients',
+        'email' => 'required|unique:patients',        
+    );
+
     public static $messageUser = array(
         'name' => 'Name is missing',
         'group_id.required' => 'Group id is missing',
@@ -45,10 +58,23 @@ class MyValidation
 
     public static $messageDoctor = array(
         'name' => 'Name is required',
-        'email' => 'Name is required',
-        'specialist' => 'Name is required',
-        'doctor_no' => 'Name is required',
+        'email' => 'Email is required',
+        'specialist' => 'Specialist is required',
+        'doctor_no' => 'Doctor number is required',
+    );
 
+    public static $messagePatient = array(
+        'name' => 'Name is required',
+        'email' => 'Email is required',
+        'id_number' => 'ID number is required',
+    );
+    
+
+    public static $messageEmployee = array(
+        'name' => 'Name is required',
+        'email' => 'Email is required',
+        'id_number' => 'ID number is required',
+        'employee_no' => 'Employee number is required',
     );
 
 }
