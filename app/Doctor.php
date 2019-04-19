@@ -12,4 +12,9 @@ class Doctor extends Model
         'hospital_name', 'passport_no', 'passport_place', 'passport_date'
     ];
 
+    public function users()
+    {
+        return $this->morphMany(User::class, 'usable');
+    }
+
 }

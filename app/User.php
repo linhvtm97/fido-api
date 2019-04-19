@@ -38,4 +38,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasOne('App\Group');
     }
+
+    public function usable()
+    {
+        return $this->morphTo();
+    }
 }
