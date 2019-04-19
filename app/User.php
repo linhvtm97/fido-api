@@ -3,8 +3,8 @@
 namespace App;
 
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Auth\Authenticatable as AuthenticableTrait;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
@@ -23,13 +23,13 @@ class User extends Authenticatable implements JWTSubject
     }
     public function setPasswordAttribute($password)
     {
-        if ( !empty($password) ) {
+        if (!empty($password)) {
             $this->attributes['password'] = bcrypt($password);
         }
-    }    
-    
+    }
+
     protected $fillable = [
-        'name', 'email', 'group_id', 'status', 'user_active_check', 'password'
+        'name', 'email', 'group_id', 'status', 'user_active_check', 'password', 'fk_refference',
     ];
 
     protected $hidden = ['password', 'created_at', 'updated_at'];

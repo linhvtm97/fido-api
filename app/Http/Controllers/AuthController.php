@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Validator;
 use Illuminate\Http\Request;
 use App\Library\MyValidation;
+use App\User;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -18,8 +20,9 @@ class AuthController extends Controller
 
         $data = $request->all();
         $data['password'] = bcrypt($data['password']);
-        array_push($data, 'api_token', Str::random(10));
+        array_push($data, Str::random(10), 'api_token');
         $user = User::create($data);
+
 
         $token = auth()->login($user);
 
