@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Resources\UserResource;
-use App\Library\MyValidation;
-use App\User;
 use App\Http\Resources\MyCollection;
+use App\Employee;
 use Validator;
-use Illuminate\Support\Str;
+use App\Library\MyValidation;
+use App\Http\Resources\EmployeeResource;
 
-class UserController extends Controller 
+class EmployeeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,7 +18,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return new MyCollection(User::all());
+        return new MyCollection(Employee::all());
     }
 
     /**
@@ -40,20 +39,16 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), MyValidation::$rulesUser, MyValidation::$messageUser);
+        $validator = Validator::make($request->all(), MyValidation::$ruleEmployee, MyValidation::$messageEmployee);
 
         if ($validator->fails()) {
             $message = $validator->messages()->getMessages();
             return response()->json([$message], 401);    
         }
-        $data = $request->all();
-        $data['password'] = bcrypt($data['password']);
-        array_push($data, 'api_token', Str::random(10));
-        $user = User::create($data);
-        if($user){
-            return new UserResource($user);
+        $empl = Employee::create($request->all());
+        if($empl){
+            return new EmployeeResource($empl);
         }
-               
     }
 
     /**
@@ -64,12 +59,12 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
-        if ($user) {
-            return new UserResource($user);
+        $empl = Employee::find($id);
+        if ($empl) {
+            return new EmployeeResource($empl);
         }
-        return response()->json(['error' => 'ID not found']);   
-      }
+        return response()->json(['error' => 'ID not found']);  
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -91,11 +86,11 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::find($id);
-        if ($user) {
-            $userUpdated = $request->all();
-            $user->update($userUpdated);
-            return new UserResource($user);
+        $empl = Employee::find($id);
+        if ($empl) {
+            $data = $request->all();
+            $empl->update($data);
+            return new EmployeeResource($empl);
         }
         return response()->json(['error' => 'ID not found']);   
     }
@@ -108,9 +103,9 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::find($id);
-        if ($user) {
-            $user->delete();
+        $empl = Employee::find($id);
+        if ($empl) {
+            $empl->delete();
             return response()->json(['message' => 'Deleted']);   
         }
         return response()->json(['error' => 'ID not found']);   
