@@ -4,6 +4,7 @@ use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 use App\Doctor;
 use Illuminate\Support\Carbon;
+use App\Patient;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +37,23 @@ $factory->define(Doctor::class, function (Faker $faker) {
         'fk_employee_id' => $faker->numberBetween(0,20),
         'hospital_name' => 'BV' .$faker->text($max =100),
         'specialist' => $faker->text($max=100),
+        'email' =>$faker->email,
+    ];
+});
+
+$factory->define(Patient::class, function (Faker $faker) {
+    return [
+        'name' => $faker->name,
+        'status' => 'offline',
+        'avatar' => $faker->text,
+        'birthday' => $faker->date($format = 'Y-m-d', $max = 'now'),
+        'gender' => 'Male',
+        'id_number' => $faker->numberBetween(10000000, 99999999),
+        'id_number_place' => $faker->address,
+        'id_number_date' => $faker->date($format = 'Y-m-d', $max = 'now'),
+        'phone_no_1' => $faker->numberBetween(11111111,999999),
+        'phone_no_2' => $faker->numberBetween(11111111,999999),
+        'fk_address_id' => $faker->numberBetween(0,20),
         'email' =>$faker->email,
     ];
 });
