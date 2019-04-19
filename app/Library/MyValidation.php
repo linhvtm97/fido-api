@@ -18,7 +18,7 @@ class MyValidation
 
 
     public static $ruleDoctor = array(
-        'name' => 'required|unique:doctors',
+        'name' => 'required',
         'doctor_no' => 'required|unique:doctors',
         'id_number' => 'required|unique:doctors',
         'email' => 'required|unique:doctors',

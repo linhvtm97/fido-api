@@ -50,10 +50,7 @@ class GroupController extends Controller
             $message = $validator->messages()->getMessages();
             return response()->json([$message], 401);    
         }
-        $data = $request->all();
-        $data['password'] = bcrypt($data['password']);
-        array_push($data, 'api_token', Str::random(10));
-        $group = Group::create($data);
+        $group = Group::create($request->all());
         if($group){
             return new GroupResource($group);
         }

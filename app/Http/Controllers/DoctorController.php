@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Doctor;
+use Validator;
 use App\Http\Resources\DoctorResource;
 use App\Http\Resources\MyCollection;
 use App\Library\MyValidation;
@@ -44,10 +45,7 @@ class DoctorController extends Controller
             $message = $validator->messages()->getMessages();
             return response()->json([$message], 401);    
         }
-        $data = $request->all();
-        $data['password'] = bcrypt($data['password']);
-        array_push($data, 'api_token', Str::random(10));
-        $doctor = Doctor::create($data);
+        $doctor = Doctor::create($request->all());
         if($doctor){
             return new DoctorResource($doctor);
         }
