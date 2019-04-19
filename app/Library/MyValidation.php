@@ -25,6 +25,11 @@ class MyValidation
         'specialist' => 'required|unique:doctors',
         
     );
+    public static $rulePatient = array(
+        'name' => 'required',
+        'id_number' => 'required|unique:patients',
+        'email' => 'required|unique:patients',        
+    );
 
     public static $messageUser = array(
         'name' => 'Name is missing',
@@ -48,7 +53,13 @@ class MyValidation
         'email' => 'Name is required',
         'specialist' => 'Name is required',
         'doctor_no' => 'Name is required',
-
     );
+
+    public static $messagePatient = array(
+        'name' => 'Name is required',
+        'email' => 'Name is required',
+        'id_number' => 'ID number is required',
+    );
+    
 
 }
