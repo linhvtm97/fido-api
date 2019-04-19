@@ -71,5 +71,19 @@ Route::group(['middleware' => ['cors', 'api']], function () {
 
         Route::delete('/{id}', 'PatientController@destroy');
     });
+
+
+    Route::prefix('employees')->group(function () {
+
+        Route::get('/', 'EmployeeController@index');
+
+        Route::get('/{id}', 'EmployeeController@show');
+
+        Route::post('/', 'EmployeeController@store');
+
+        Route::put('/{id}', 'EmployeeController@update');
+
+        Route::delete('/{id}', 'EmployeeController@destroy');
+    });
     
 });
