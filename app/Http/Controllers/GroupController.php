@@ -44,19 +44,19 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), MyValidation::$ruleGroup, MyValidation::$messageUser);
+        $validator = Validator::make($request->all(), MyValidation::$ruleGroup, MyValidation::$messageGroup);
 
         if ($validator->fails()) {
             $message = $validator->messages()->getMessages();
-            return [new MyResponse(ERROR, $message)];
+            return response()->json([$message], 401);    
         }
-        $group = new Group();
-        $group->name = $request->input('name');
-        $group->description = $request->input('description');
-        $group->status = $request->input('status');
-        $group->save();
-
-        return new GroupResource($group);
+        $data = $request->all();
+        $data['password'] = bcrypt($data['password']);
+        array_push($data, 'api_token', Str::random(10));
+        $group = Group::create($data);
+        if($group){
+            return new GroupResource($group);
+        }
     }
 
     /**
@@ -72,7 +72,7 @@ class GroupController extends Controller
             return new GroupResource($group);
         }
 
-        return "Group Not found"; // temporary error
+        return response()->json(['error' => 'ID not found']);   
     }
 
     /**
@@ -102,7 +102,7 @@ class GroupController extends Controller
             $group->update($groupUpdated);
             return new GroupResource($group);
         }
-        return [new MyResponse(ERROR, "Can not find id")];
+        return response()->json(['error' => 'ID not found']);   
     }
 
     /**
@@ -116,8 +116,8 @@ class GroupController extends Controller
         $group = Group::find($id);
         if ($group) {
             $group->delete();
-            return "Deleted";
+            return response()->json(['message' => 'Deleted']);   
         }
-        return "ID not found";
+        return response()->json(['error' => 'ID not found']);   
     }
 }

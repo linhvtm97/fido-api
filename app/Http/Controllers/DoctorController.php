@@ -38,11 +38,19 @@ class DoctorController extends Controller
      */
     public function store(Request $request)
     {
-        $doctor = Doctor::create($request->all());
+        $validator = Validator::make($request->all(), MyValidation::$ruleDoctor, MyValidation::$messageDoctor);
+
+        if ($validator->fails()) {
+            $message = $validator->messages()->getMessages();
+            return response()->json([$message], 401);    
+        }
+        $data = $request->all();
+        $data['password'] = bcrypt($data['password']);
+        array_push($data, 'api_token', Str::random(10));
+        $doctor = Doctor::create($data);
         if($doctor){
             return new DoctorResource($doctor);
         }
-        return [new MyValidation(ERROR, "Can not create")];
     }
 
     /**
@@ -53,8 +61,11 @@ class DoctorController extends Controller
      */
     public function show($id)
     {
-        $doctor = Doctor::findOrFail($id);
-        return new DoctorResource($doctor);
+        $doctor = Doctor::find($id);
+        if ($doctor) {
+            return new DoctorResource($user);
+        }
+        return response()->json(['error' => 'ID not found']);   
     }
 
     /**
@@ -83,7 +94,7 @@ class DoctorController extends Controller
             $doctor->update($doctorUpdated);
             return new DoctorResource($doctor);
         }
-        return [new MyResponse(ERROR, "Can not find id")];
+        return response()->json(['error' => 'ID not found']);   
     }
 
     /**
@@ -97,8 +108,8 @@ class DoctorController extends Controller
         $doctor = Doctor::find($id);
         if ($doctor) {
             $doctor->delete();
-            return "Deleted";
+            return response()->json(['message' => 'Deleted']);   
         }
-        return "ID not found";
+        return response()->json(['error' => 'ID not found']);   
     }
 }
