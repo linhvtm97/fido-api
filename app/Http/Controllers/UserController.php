@@ -10,6 +10,7 @@ use App\Http\Resources\MyCollection;
 use Validator;
 use Illuminate\Support\Str;
 use App\Http\Resources\MyResource;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller 
 {
@@ -48,9 +49,11 @@ class UserController extends Controller
             return response()->json([$message], 401);    
         }
         $data = $request->all();
-        $data['password'] = bcrypt($data['password']);
         array_push($data, 'api_token', Str::random(10));
         $user = User::create($data);
+        $user->password = $data['password'];
+        $user->save();
+        
         if($user){
             return new UserResource($user);
         }
