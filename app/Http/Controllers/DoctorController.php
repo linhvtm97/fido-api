@@ -61,7 +61,7 @@ class DoctorController extends Controller
     {
         $doctor = Doctor::find($id);
         if ($doctor) {
-            return new DoctorResource($user);
+            return new DoctorResource($doctor);
         }
         return response()->json(['error' => 'ID not found']);   
     }

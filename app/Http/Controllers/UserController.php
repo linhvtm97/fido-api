@@ -9,6 +9,7 @@ use App\User;
 use App\Http\Resources\MyCollection;
 use Validator;
 use Illuminate\Support\Str;
+use App\Http\Resources\MyResource;
 
 class UserController extends Controller 
 {
@@ -65,8 +66,9 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::find($id);
-        if ($user) {
-            return new UserResource($user);
+        $role = $user->usable;
+        if ($role) {
+            return new MyResource($role);
         }
         return response()->json(['error' => 'ID not found']);   
       }
