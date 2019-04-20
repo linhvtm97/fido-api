@@ -6,6 +6,7 @@ use App\Doctor;
 use Illuminate\Support\Carbon;
 use App\Patient;
 use App\Employee;
+use App\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -82,5 +83,18 @@ $factory->define(Employee::class, function (Faker $faker) {
         'tax_number' => 'DN:'.$faker->text($max=100),
         'email' =>$faker->email,
         'active_check' => 1,
+    ];
+});
+$factory->define(User::class, function (Faker $faker) {
+    return [
+        'name' => $faker->name,
+        'status' => 'offline',
+        'email' =>$faker->email,
+        'group_id' => $faker->numberBetween(0,10),
+        'password' => $faker->password($max=50),
+        'user_active_check' => 1,
+        'user_reset_token' => null,
+        'usable_id'=>$faker->numberBetween(0,19),
+        'usable_type'=>'App\Doctor',
     ];
 });
