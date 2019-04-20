@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Library\MyValidation;
 use App\User;
 use Illuminate\Support\Str;
+use App\Http\Resources\MyResource;
 
 class AuthController extends Controller
 {
@@ -23,21 +24,27 @@ class AuthController extends Controller
         array_push($data, Str::random(10), 'api_token');
         $user = User::create($data);
 
-
         $token = auth()->login($user);
 
-        return $this->respondWithToken($token);
+        return $this->respondWithToken($token, $user);
     }
 
-    public function login()
+    public static function responseWithUser($user){
+        $role = $user->usable;
+        if ($role) {
+            return new MyResource($role);
+        }
+    }
+
+    public function login(Request $request)
     {
         $credentials = request(['email', 'password']);
 
         if (! $token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-
-        return $this->respondWithToken($token);
+        $user = User::where('email', $request['email'])->first();
+        return $this->respondWithToken($token, $user);
     }
 
     public function logout()
@@ -47,12 +54,14 @@ class AuthController extends Controller
         return response()->json(['message' => 'Successfully logged out']);
     }
 
-    protected function respondWithToken($token)
+    protected function respondWithToken($token, $user)
     {
         return response()->json([
             'access_token' => $token,
             'token_type'   => 'bearer',
-            'expires_in'   => auth()->factory()->getTTL() * 60
+            'expires_in'   => auth()->factory()->getTTL() * 60, 
+            'data' => AuthController::responseWithUser($user),
+            'group_id' => $user->group_id,
         ]);
     }
 }
