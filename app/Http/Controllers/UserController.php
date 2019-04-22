@@ -8,9 +8,7 @@ use App\Library\MyValidation;
 use App\User;
 use App\Http\Resources\MyCollection;
 use Validator;
-use Illuminate\Support\Str;
 use App\Http\Resources\MyResource;
-use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller 
 {
@@ -46,12 +44,15 @@ class UserController extends Controller
 
         if ($validator->fails()) {
             $message = $validator->messages()->getMessages();
-            return response()->json([$message], 401);    
+            return response()->json([$message, 'status_code' => 'FAIL'], 401);
         }
         $data = $request->all();
-        array_push($data, 'api_token', Str::random(10));
         $user = User::create($data);
         $user->password = $data['password'];
+   
+        $model_name = $user->usable_type;
+        $role = $model_name::create($data);    
+        $user->usable_id = $role->id;
         $user->save();
         
         if($user){
@@ -73,7 +74,7 @@ class UserController extends Controller
         if ($role) {
             return new MyResource($role);
         }
-        return response()->json(['error' => 'ID not found']);   
+        return response()->json(['status_code' => 'FAIL']);   
       }
 
     /**
@@ -102,7 +103,7 @@ class UserController extends Controller
             $user->update($userUpdated);
             return new UserResource($user);
         }
-        return response()->json(['error' => 'ID not found']);   
+        return response()->json(['status_code' => 'FAIL']);   
     }
 
     /**
@@ -116,8 +117,8 @@ class UserController extends Controller
         $user = User::find($id);
         if ($user) {
             $user->delete();
-            return response()->json(['message' => 'Deleted']);   
+            return response()->json(['status_code' => 'PASS']);   
         }
-        return response()->json(['error' => 'ID not found']);   
+        return response()->json(['status_code' => 'FAIL']);   
     }
 }

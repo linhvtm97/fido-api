@@ -20,10 +20,6 @@ Route::group(['middleware' => ['cors', 'api']], function () {
 
     Route::post('/logout', 'AuthController@logout');
 
-    Route::resource('groups', 'GroupController')->except([
-        'create', 'edit'
-    ]);
-
     Route::resource('users', 'UserController')->except([
         'create', 'edit'
     ]);

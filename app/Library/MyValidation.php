@@ -6,7 +6,6 @@ class MyValidation
 
     public static $rulesUser = array(
         'name' => 'required',
-        'group_id' => 'required',
         'email' => 'required|email|unique:users,email',
         'password' => 'required|alpha_num|min:8|max:20',
         'rePassword' => 'same:password',
@@ -41,7 +40,6 @@ class MyValidation
 
     public static $messageUser = array(
         'name' => 'Name is missing',
-        'group_id.required' => 'Group id is missing',
         'email.required' => 'Email is missing',
         'email.email' => 'Email is incorrect',
         'password.required' => 'Password is missing',
