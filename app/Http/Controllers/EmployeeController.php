@@ -3,11 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Resources\MyCollection;
-use App\Employee;
-use Validator;
 use App\Library\MyValidation;
-use App\Http\Resources\EmployeeResource;
 
 class EmployeeController extends Controller
 {
@@ -18,7 +14,7 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        return new MyCollection(Employee::all());
+        return MyController::index('App\\Employee');
     }
 
     /**
@@ -39,16 +35,7 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), MyValidation::$ruleEmployee, MyValidation::$messageEmployee);
-
-        if ($validator->fails()) {
-            $message = $validator->messages()->getMessages();
-            return response()->json([$message], 401);    
-        }
-        $empl = Employee::create($request->all());
-        if($empl){
-            return new EmployeeResource($empl);
-        }
+        return MyController::store($request, 'App\\Employee', MyValidation::$ruleEmployee, MyValidation::$messageEmployee);
     }
 
     /**
@@ -59,11 +46,7 @@ class EmployeeController extends Controller
      */
     public function show($id)
     {
-        $empl = Employee::find($id);
-        if ($empl) {
-            return new EmployeeResource($empl);
-        }
-        return response()->json(['error' => 'ID not found']);  
+        return MyController::show('App\\Employee', $id);
     }
 
     /**
@@ -86,13 +69,7 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $empl = Employee::find($id);
-        if ($empl) {
-            $data = $request->all();
-            $empl->update($data);
-            return new EmployeeResource($empl);
-        }
-        return response()->json(['error' => 'ID not found']);   
+        return MyController::update($request, $id, 'App\\Employee');
     }
 
     /**
@@ -103,11 +80,6 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
-        $empl = Employee::find($id);
-        if ($empl) {
-            $empl->delete();
-            return response()->json(['message' => 'Deleted']);   
-        }
-        return response()->json(['error' => 'ID not found']);   
+        return MyController::destroy($id, 'App\\Employee');
     }
 }
