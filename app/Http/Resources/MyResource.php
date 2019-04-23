@@ -14,6 +14,8 @@ class MyResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return ['status_code'=>'PASS',
+                'data'=>parent::toArray($request)
+    ];
     }
 }

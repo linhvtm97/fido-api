@@ -7,6 +7,7 @@ use Illuminate\Support\Carbon;
 use App\Patient;
 use App\Employee;
 use App\User;
+use App\Admin;
 
 /*
 |--------------------------------------------------------------------------
@@ -88,13 +89,20 @@ $factory->define(Employee::class, function (Faker $faker) {
 $factory->define(User::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
-        'status' => 'offline',
+        'user_status' => 'actived',
         'email' =>$faker->email,
-        'group_id' => $faker->numberBetween(0,10),
-        'password' => $faker->password($max=50),
-        'user_active_check' => 1,
-        'user_reset_token' => null,
-        'usable_id'=>$faker->numberBetween(0,19),
-        'usable_type'=>'App\Doctor',
+        'password' => bcrypt('linhtinh123'),
+        'verified' => 1,
+        'usable_id'=>$faker->unique()->numberBetween(1,50),
+        'usable_type'=>'App\Admin',
+    ];
+});
+
+$factory->define(Admin::class, function (Faker $faker) {
+    return [
+        'name' => $faker->name,
+        'description' => '',
+        'phone_number' =>$faker->phoneNumber,
+        'email' => $faker->email,
     ];
 });

@@ -6,7 +6,6 @@ class MyValidation
 
     public static $rulesUser = array(
         'name' => 'required',
-        'group_id' => 'required',
         'email' => 'required|email|unique:users,email',
         'password' => 'required|alpha_num|min:8|max:20',
         'rePassword' => 'same:password',
@@ -21,9 +20,7 @@ class MyValidation
         'name' => 'required',
         'doctor_no' => 'required|unique:doctors',
         'id_number' => 'required|unique:doctors',
-        'email' => 'required|unique:doctors',
-        'specialist' => 'required|unique:doctors',
-        
+        'email' => 'required|unique:doctors',        
     );
 
     public static $ruleEmployee = array(
@@ -41,7 +38,6 @@ class MyValidation
 
     public static $messageUser = array(
         'name' => 'Name is missing',
-        'group_id.required' => 'Group id is missing',
         'email.required' => 'Email is missing',
         'email.email' => 'Email is incorrect',
         'password.required' => 'Password is missing',
@@ -59,7 +55,6 @@ class MyValidation
     public static $messageDoctor = array(
         'name' => 'Name is required',
         'email' => 'Email is required',
-        'specialist' => 'Specialist is required',
         'doctor_no' => 'Doctor number is required',
     );
 

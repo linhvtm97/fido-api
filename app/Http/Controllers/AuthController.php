@@ -6,10 +6,7 @@ use Validator;
 use Illuminate\Http\Request;
 use App\Library\MyValidation;
 use App\User;
-use Illuminate\Support\Str;
 use App\Http\Resources\MyResource;
-use Illuminate\Support\Facades\Hash;
-use Tymon\JWTAuth\Facades\JWTAuth as TymonJWTAuth;
 
 class AuthController extends Controller
 {
@@ -19,16 +16,18 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             $message = $validator->messages()->getMessages();
-            return response()->json($message, 401);
+            return response()->json([$message, 'status_code' => 'FAIL'], 401);
         }
-
         $data = $request->all();
-        $data['password'] = bcrypt($data['password']);
-        array_push($data, Str::random(10), 'api_token');
         $user = User::create($data);
+        $user->password = $data['password'];
+
+        $model_name = $user->usable_type;
+        $role = $model_name::create($data);
+        $user->usable_id = $role->id;
+        $user->save();
 
         $token = auth()->login($user);
-
         return $this->respondWithToken($token, $user);
     }
 
@@ -43,20 +42,19 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = request(['email', 'password']);
-        
-        if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+
+        if (!$token = auth()->attempt($credentials)) {
+            return response()->json(['status_code' => 'FAIL'], 401);
         }
         $user = User::where('email', $request['email'])->first();
         return $this->respondWithToken($token, $user);
-      
     }
 
     public function logout()
     {
         auth()->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json(['status_code' => 'PASS']);
     }
 
     protected function respondWithToken($token, $user)
@@ -66,7 +64,9 @@ class AuthController extends Controller
             'token_type'   => 'bearer',
             'expires_in'   => auth()->factory()->getTTL() * 60,
             'data' => AuthController::responseWithUser($user),
-            'group_id' => $user->group_id,
+            'status_code' => 'PASS',
+            'usable_type' => $user->usable_type,
+            'usable_id' => $user->usable_id,
         ]);
     }
 }
