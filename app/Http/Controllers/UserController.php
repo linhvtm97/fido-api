@@ -9,6 +9,7 @@ use App\User;
 use App\Http\Resources\MyCollection;
 use Validator;
 use App\Http\Resources\MyResource;
+use DB;
 
 class UserController extends Controller 
 {
@@ -19,6 +20,7 @@ class UserController extends Controller
      */
     public function index()
     {
+        DB::table('users')->truncate();
         return new MyCollection(User::all());
     }
 

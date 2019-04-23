@@ -7,6 +7,7 @@ use Illuminate\Support\Carbon;
 use App\Patient;
 use App\Employee;
 use App\User;
+use App\Admin;
 
 /*
 |--------------------------------------------------------------------------
@@ -93,6 +94,15 @@ $factory->define(User::class, function (Faker $faker) {
         'password' => bcrypt('linhtinh123'),
         'verified' => 1,
         'usable_id'=>$faker->unique()->numberBetween(1,50),
-        'usable_type'=>'App\Doctor',
+        'usable_type'=>'App\Admin',
+    ];
+});
+
+$factory->define(Admin::class, function (Faker $faker) {
+    return [
+        'name' => $faker->name,
+        'description' => '',
+        'phone_number' =>$faker->phoneNumber,
+        'email' => $faker->email,
     ];
 });
