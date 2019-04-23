@@ -6,8 +6,6 @@ use Validator;
 use Illuminate\Http\Request;
 use App\Library\MyValidation;
 use App\User;
-use App\Doctor;
-use App\Patient;
 use App\Http\Resources\MyResource;
 
 class AuthController extends Controller
@@ -23,9 +21,9 @@ class AuthController extends Controller
         $data = $request->all();
         $user = User::create($data);
         $user->password = $data['password'];
-   
+
         $model_name = $user->usable_type;
-        $role = $model_name::create($data);    
+        $role = $model_name::create($data);
         $user->usable_id = $role->id;
         $user->save();
 

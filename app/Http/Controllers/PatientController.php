@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Resources\MyCollection;
 use Validator;
 use App\Library\MyValidation;
-use App\Patient;
-use App\Http\Resources\PatientResource;
 
 class PatientController extends Controller
 {
@@ -18,7 +15,7 @@ class PatientController extends Controller
      */
     public function index()
     {
-        return new MyCollection(Patient::all());
+        return MyController::index('App\\Patient');
     }
 
     /**
@@ -39,16 +36,7 @@ class PatientController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), MyValidation::$rulePatient, MyValidation::$messagePatient);
-
-        if ($validator->fails()) {
-            $message = $validator->messages()->getMessages();
-            return response()->json([$message], 401);    
-        }
-        $patient = Patient::create($request->all());
-        if($patient){
-            return new PatientResource($patient);
-        }
+        return MyController::store($request, 'App\\Patient', MyValidation::$rulePatient, MyValidation::$messagePatient);
     }
 
     /**
@@ -59,11 +47,7 @@ class PatientController extends Controller
      */
     public function show($id)
     {
-        $patient = Patient::find($id);
-        if ($patient) {
-            return new PatientResource($patient);
-        }
-        return response()->json(['error' => 'ID not found']);  
+        return MyController::show('App\\Patient', $id);
     }
 
     /**
@@ -86,13 +70,7 @@ class PatientController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $patient = Patient::find($id);
-        if ($patient) {
-            $data = $request->all();
-            $patient->update($data);
-            return new PatientResource($patient);
-        }
-        return response()->json(['error' => 'ID not found']);   
+        return MyController::update($request, $id, 'App\\Patient');
     }
 
     /**
@@ -103,11 +81,6 @@ class PatientController extends Controller
      */
     public function destroy($id)
     {
-        $patient = Patient::find($id);
-        if ($patient) {
-            $patient->delete();
-            return response()->json(['message' => 'Deleted']);   
-        }
-        return response()->json(['error' => 'ID not found']); 
+        return MyController::destroy($id, 'App\\Patient');
     }
 }
