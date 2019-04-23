@@ -17,4 +17,8 @@ class Doctor extends Model
         return $this->morphMany(User::class, 'usable');
     }
 
+    public function certificates()
+    {
+        return $this->hasMany('App\Certificate');
+     }
 }
