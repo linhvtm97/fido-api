@@ -9,8 +9,4 @@ class Address extends Model
     protected $fillable = [
         'name', 'code',
     ];
-
-    public function doctor(){
-        return $this->belongsTo('App\Doctor');
-    }
 }

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Library\MyValidation;
+use App\Http\Resources\DoctorResource;
+use App\Doctor;
+use DB;
 
 class DoctorController extends Controller
 {
@@ -45,8 +48,8 @@ class DoctorController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        return MyController::show('App\\Doctor', $id);
+    {  
+        return new DoctorResource(Doctor::find($id));
     }
 
     /**

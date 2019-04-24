@@ -34,12 +34,11 @@ $factory->define(Doctor::class, function (Faker $faker) {
         'passport_no' => $faker->numberBetween(100000000, 99999999),
         'passport_place' => $faker->address,
         'passport_date' => $faker->date($format = 'Y-m-d', $max = 'now'),
-        'phone_no_1' => $faker->numberBetween(11111111,999999),
-        'phone_no_2' => $faker->numberBetween(11111111,999999),
-        'fk_address_id' => $faker->numberBetween(0,20),
-        'fk_employee_id' => $faker->numberBetween(0,20),
+        'phone_number' => $faker->numberBetween(11111111,999999),
+        'address_id' => $faker->numberBetween(1,20),
+        'fk_employee_id' => $faker->numberBetween(1,20),
         'hospital_name' => 'BV' .$faker->text($max =100),
-        'specialist' => $faker->text($max=100),
+        'specialist_id' => $faker->numberBetween(1,20),
         'email' =>$faker->email,
     ];
 });
