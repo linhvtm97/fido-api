@@ -1,5 +1,6 @@
 <?php
-
+use App\Specialist;
+use App\Http\Resources\MyCollection;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,10 @@ Route::group(['middleware' => ['cors', 'api']], function () {
     ]);
 
     Route::resource('employees', 'EmployeeController')->except([
+        'create', 'edit'
+    ]);
+
+    Route::resource('doctors.certificates', 'DoctorsCertificatesController')->except([
         'create', 'edit'
     ]);
    
