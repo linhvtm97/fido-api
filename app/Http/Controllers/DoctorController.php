@@ -3,10 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Doctor;
-use Validator;
-use App\Http\Resources\DoctorResource;
-use App\Http\Resources\MyCollection;
 use App\Library\MyValidation;
 
 class DoctorController extends Controller
@@ -18,7 +14,7 @@ class DoctorController extends Controller
      */
     public function index()
     {
-        return new MyCollection(Doctor::all());
+        return MyController::index('App\\Doctor');
     }
 
     /**
@@ -39,16 +35,7 @@ class DoctorController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), MyValidation::$ruleDoctor, MyValidation::$messageDoctor);
-
-        if ($validator->fails()) {
-            $message = $validator->messages()->getMessages();
-            return response()->json([$message], 401);    
-        }
-        $doctor = Doctor::create($request->all());
-        if($doctor){
-            return new DoctorResource($doctor);
-        }
+        return MyController::store($request, 'App\\Doctor', MyValidation::$ruleDoctor, MyValidation::$messageDoctor);
     }
 
     /**
@@ -59,11 +46,7 @@ class DoctorController extends Controller
      */
     public function show($id)
     {
-        $doctor = Doctor::find($id);
-        if ($doctor) {
-            return new DoctorResource($doctor);
-        }
-        return response()->json(['error' => 'ID not found']);   
+        return MyController::show('App\\Doctor', $id);
     }
 
     /**
@@ -86,13 +69,7 @@ class DoctorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $doctor = Doctor::find($id);
-        if ($doctor) {
-            $doctorUpdated = $request->all();
-            $doctor->update($doctorUpdated);
-            return new DoctorResource($doctor);
-        }
-        return response()->json(['error' => 'ID not found']);   
+        return MyController::update($request, $id, 'App\\Doctor');
     }
 
     /**
@@ -103,11 +80,6 @@ class DoctorController extends Controller
      */
     public function destroy($id)
     {
-        $doctor = Doctor::find($id);
-        if ($doctor) {
-            $doctor->delete();
-            return response()->json(['message' => 'Deleted']);   
-        }
-        return response()->json(['error' => 'ID not found']);   
+        return MyController::destroy($id, 'App\\Doctor');
     }
 }
