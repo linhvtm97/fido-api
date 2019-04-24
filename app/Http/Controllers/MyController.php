@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Resources\MyResource;
 use App\Http\Resources\MyCollection;
 use Validator;
+use App\Library\MyFunctions;
+use App\Http\Resources\DoctorResource;
 
 class MyController extends Controller
 {
@@ -36,6 +38,14 @@ class MyController extends Controller
         }
         $object = $model::create($request->all());
         if ($object) {
+            if ($avatar = $request->file('avatar')) {
+                $imageURL = MyFunctions::upload_img($avatar);
+                $object->avatar = $imageURL;
+                $object->save();
+            }
+            if ($model == 'App\\Doctor') {
+                    return new DoctorResource($object);
+                }
             return new MyResource($object);
         }
     }
@@ -67,7 +77,15 @@ class MyController extends Controller
         $object = $model::find($id);
         if ($object) {
             $data = $request->all();
+            if ($avatar = $request->file('avatar')) {
+                $imageURL = MyFunctions::upload_img($avatar);
+                $object->avatar = $imageURL;
+                $object->save();
+            }
             $object->update($data);
+            if ($model == 'App\\Doctor') {
+                    return new DoctorResource($object);
+                }
             return new MyResource($object);
         }
         return response()->json(['status_code' => 'FAIL']);

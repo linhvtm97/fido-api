@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateSpecialistsTable extends Migration
+class UpdatePatientsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class UpdateSpecialistsTable extends Migration
      */
     public function up()
     {
-        Schema::table('doctors', function (Blueprint $table) {
-            // $table->integer('address_id')->nullable()->change();
-            // $table->integer('specialist_id')->nullable()->change();
+        Schema::table('patients', function (Blueprint $table) {
+            $table->renameColumn('fk_address_id','address_id')->nullable()->change();
         });
     }
 

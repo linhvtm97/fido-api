@@ -12,6 +12,10 @@ class Employee extends Model
         'active_check', 'passport_no', 'passport_place', 'passport_date', 'start_date'
     ];
 
+    protected $hidden = [
+        'created_at','updated_at', 'updated_by_user', 'created_by_user'
+    ];
+    
     public function users()
     {
         return $this->morphMany(User::class, 'usable');

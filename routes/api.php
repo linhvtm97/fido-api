@@ -1,6 +1,7 @@
 <?php
 use App\Specialist;
 use App\Http\Resources\MyCollection;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,9 +41,8 @@ Route::group(['middleware' => ['cors', 'api']], function () {
     Route::resource('doctors.certificates', 'DoctorsCertificatesController')->except([
         'create', 'edit'
     ]);
-   
+
     Route::resource('admins', 'AdminController')->except([
         'create', 'edit'
     ]);
-    
 });
