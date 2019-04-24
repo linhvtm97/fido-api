@@ -20,5 +20,8 @@ class Doctor extends Model
     public function address(){
         return $this->hasOne('App\Address', 'address_id');
     }
+    public function specialist(){
+        return $this->hasOne('App\Specialist', 'specialist_id');
+    }
 
 }
