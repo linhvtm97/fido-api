@@ -17,4 +17,11 @@ class Doctor extends Model
         return $this->morphMany(User::class, 'usable');
     }
 
+    public function address(){
+        return $this->hasOne('App\Address', 'address_id');
+    }
+    public function specialist(){
+        return $this->hasOne('App\Specialist', 'specialist_id');
+    }
+
 }

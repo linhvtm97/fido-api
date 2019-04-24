@@ -1,5 +1,6 @@
 <?php
-
+use App\Specialist;
+use App\Http\Resources\MyCollection;
 
 /*
 |--------------------------------------------------------------------------
