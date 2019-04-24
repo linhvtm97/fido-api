@@ -3,21 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Library\MyValidation;
-use App\Http\Resources\DoctorResource;
 use App\Doctor;
-use DB;
+use App\Http\Resources\MyCollection;
+use App\Http\Resources\Certificate;
+use App\Http\Resources\CertificateResource;
 
-class DoctorController extends Controller
+class DoctorsCertificatesController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($doctor_id)
     {
-        return MyController::index('App\\Doctor');
+        return new CertificateResource(Doctor::find($doctor_id)->certificates()->first());
     }
 
     /**
@@ -38,7 +38,7 @@ class DoctorController extends Controller
      */
     public function store(Request $request)
     {
-        return MyController::store($request, 'App\\Doctor', MyValidation::$ruleDoctor, MyValidation::$messageDoctor);
+        //
     }
 
     /**
@@ -48,8 +48,9 @@ class DoctorController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {  
-        return new DoctorResource(Doctor::find($id));
+    {
+        $certificates = Doctor::find($id)->certificates();
+        dd($certificates);
     }
 
     /**
@@ -72,7 +73,7 @@ class DoctorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return MyController::update($request, $id, 'App\\Doctor');
+        //
     }
 
     /**
@@ -83,6 +84,6 @@ class DoctorController extends Controller
      */
     public function destroy($id)
     {
-        return MyController::destroy($id, 'App\\Doctor');
+        //
     }
 }

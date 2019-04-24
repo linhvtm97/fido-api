@@ -12,9 +12,16 @@ class Doctor extends Model
         'hospital_name', 'passport_no', 'passport_place', 'passport_date'
     ];
 
+    protected $hidden = [
+        'created_at','updated_at', 'updated_by_user', 'created_by_user'
+    ];
     public function users()
     {
         return $this->morphMany(User::class, 'usable');
     }
 
+    public function certificates()
+    {
+        return $this->hasMany('App\Certificate');
+     }
 }
