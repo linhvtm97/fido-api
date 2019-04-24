@@ -1,7 +1,7 @@
 <?php
 use App\Specialist;
-use App\Http\Resources\MyCollection;
-use Illuminate\Http\Request;
+use App\Address;
+use App\Http\Resources\MyResource;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,4 +45,12 @@ Route::group(['middleware' => ['cors', 'api']], function () {
     Route::resource('admins', 'AdminController')->except([
         'create', 'edit'
     ]);
+
+    Route::get('addresses', function () {
+        return new MyResource(Address::all());
+    });
+
+    Route::get('specialists', function () {
+        return new MyResource(Specialist::all());
+    });
 });
