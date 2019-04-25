@@ -13,7 +13,7 @@ class Doctor extends Model
     ];
 
     protected $hidden = [
-        'created_at','updated_at', 'updated_by_user', 'created_by_user'
+        'created_at', 'updated_at', 'updated_by_user', 'created_by_user'
     ];
     public function users()
     {
@@ -23,5 +23,5 @@ class Doctor extends Model
     public function certificates()
     {
         return $this->hasMany('App\Certificate');
-     }
+    }
 }

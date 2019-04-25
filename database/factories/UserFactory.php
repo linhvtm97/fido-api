@@ -8,6 +8,7 @@ use App\Patient;
 use App\Employee;
 use App\User;
 use App\Admin;
+use App\Certificate;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +41,7 @@ $factory->define(Doctor::class, function (Faker $faker) {
         'hospital_name' => 'BV Trung Ương Huế ',
         'specialist_id' => $faker->numberBetween(2,40),
         'email' =>$faker->email,
+        'sub_speialist_id' => $faker->numberBetween(2,40),
     ];
 });
 
