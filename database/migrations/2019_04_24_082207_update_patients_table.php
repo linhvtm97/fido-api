@@ -14,7 +14,7 @@ class UpdatePatientsTable extends Migration
     public function up()
     {
         Schema::table('patients', function (Blueprint $table) {
-            $table->renameColumn('fk_address_id','address_id')->nullable()->change();
+            // $table->renameColumn('fk_address_id','address_id')->nullable()->change();
         });
     }
 
