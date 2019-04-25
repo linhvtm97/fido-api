@@ -18,7 +18,7 @@ class MyController extends Controller
      */
     public static function index($model)
     {
-        return new MyCollection($model::paginate(10));
+        return new MyResource($model::all());
     }
 
 
