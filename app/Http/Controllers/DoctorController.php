@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Library\MyValidation;
 use App\Http\Resources\DoctorResource;
 use App\Doctor;
-use DB;
+use App\Http\Resources\DoctorCollection;
 
 class DoctorController extends Controller
 {
@@ -17,7 +17,7 @@ class DoctorController extends Controller
      */
     public function index()
     {
-        return MyController::index('App\\Doctor');
+        return new DoctorCollection(Doctor::all());
     }
 
     /**
@@ -48,7 +48,7 @@ class DoctorController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {  
+    {
         return new DoctorResource(Doctor::find($id));
     }
 
