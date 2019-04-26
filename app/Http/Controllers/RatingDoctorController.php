@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Doctor;
 use App\Http\Resources\MyCollection;
-use App\Certificate;
+use App\Rating;
+use App\Doctor;
 use App\Library\MyFunctions;
-use App\Http\Resources\MyResource;
+use App\Http\Resources\RatingResource;
 
-class DoctorCertificateController extends Controller
+class RatingDoctorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +18,7 @@ class DoctorCertificateController extends Controller
      */
     public function index($doctor_id)
     {
-        return new MyCollection(Doctor::find($doctor_id)->certificates()->get());
+        return new MyCollection(Doctor::find($doctor_id)->ratings()->get());
     }
 
     /**
@@ -39,16 +39,16 @@ class DoctorCertificateController extends Controller
      */
     public function store(Request $request, $doctor_id)
     {
-        $certificate = Certificate::create($request->all());
-        if ($certificate) {
-            if ($image = $request->file('image')) {
-                $imageURL = MyFunctions::upload_img($image);
-                $certificate->image = $imageURL;
-                $certificate->doctor_id = $doctor_id;
-                $certificate->save();
-            }
-            return new MyResource($certificate);
+        $data = $request->all();
+        MyFunctions::updateRating($data['star'], $doctor_id);
+        $rating = Rating::create($data);
+        if ($rating) {
+            $data = Rating::with('patient')->find($rating->id);
+            $data->doctor_id = $doctor_id;
+            $data->save();
+            return response()->json(['status_code' => 200, 'data' => new RatingResource($data)]);
         }
+        return response()->json(['status_code' => 302]);
     }
 
     /**
@@ -59,9 +59,11 @@ class DoctorCertificateController extends Controller
      */
     public function show($doctor_id, $id)
     {
-        $certificate = Doctor::find($doctor_id)->certificates()->find($id);
-        if ($certificate) {
-            return new MyResource($certificate);
+        $rating = Doctor::find($doctor_id)->ratings()->find($id);
+
+        if ($rating) {
+            $data = Rating::with('patient')->find($rating->id);
+            return new RatingResource($data);
         }
         return response()->json(['status_code' => 401], 401);
     }
@@ -86,18 +88,14 @@ class DoctorCertificateController extends Controller
      */
     public function update(Request $request, $doctor_id, $id)
     {
-        $certificate = Doctor::find($doctor_id)->certificates()->find($id);
-        if ($certificate) {
+        $rating = Rating::with('patient')->find($id);
+        if ($rating) {
             $data = $request->all();
-            if ($image = $request->file('image')) {
-                $imageURL = MyFunctions::upload_img($image);
-                $certificate->image = $imageURL;
-                $certificate->save();
-            }
-            $certificate->update($data);
-            return new MyResource($certificate);
+            MyFunctions::updateRating($data['star'], $doctor_id);
+            $rating->update($data);
+            return response()->json(['status_code' => 200, 'data' => new RatingResource($rating)]);
         }
-        return response()->json(['status_code' => 202]);
+        return response()->json(['status_code' => 302]);
     }
 
     /**
@@ -108,9 +106,9 @@ class DoctorCertificateController extends Controller
      */
     public function destroy($doctor_id, $id)
     {
-        $certificate = Doctor::find($doctor_id)->certificates()->find($id);
-        if ($certificate) {
-            $certificate->delete();
+        $rating = Doctor::find($doctor_id) - ratings()->find($id);
+        if ($rating) {
+            $rating->delete();
             return response()->json(['status_code' => 204]);
         }
         return response()->json(['status_code' => 202]);

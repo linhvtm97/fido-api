@@ -9,6 +9,7 @@ use App\Employee;
 use App\User;
 use App\Admin;
 use App\Certificate;
+use App\Rating;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,8 +57,7 @@ $factory->define(Patient::class, function (Faker $faker) {
         'id_number' => $faker->numberBetween(10000000, 99999999),
         'id_number_place' => $faker->address,
         'id_number_date' => $faker->date($format = 'Y-m-d', $max = 'now'),
-        'phone_no_1' => $faker->numberBetween(11111111, 999999),
-        'phone_no_2' => $faker->numberBetween(11111111, 999999),
+        'phone_number' => $faker->numberBetween(11111111, 999999),
         'fk_address_id' => $faker->numberBetween(1, 20),
         'email' => $faker->email,
     ];
@@ -65,12 +65,12 @@ $factory->define(Patient::class, function (Faker $faker) {
 
 
 $factory->define(Employee::class, function (Faker $faker) {
-    static $patient_number = 1;
+    static $employee_number = 1;
     return [
         'name' => $faker->name,
         'status' => 'offline',
         'created_by_user' => $faker->numberBetween(1, 50),
-        'employee_no' => 'NV' . $patient_number++,
+        'employee_no' => 'NV' . $employee_number++,
         'avatar' => $faker->text,
         'birthday' => $faker->date($format = 'Y-m-d', $max = 'now'),
         'gender' => 'Male',
@@ -105,5 +105,14 @@ $factory->define(Certificate::class, function (Faker $faker) {
         'image' => 'https://imgur.com/088eeVL',
         'description' => $faker->text(),
         'doctor_id' => $faker->unique()->numberBetween(1, 50),
+    ];
+});
+
+$factory->define(Rating::class, function (Faker $faker) {
+    return [
+        'star' => $faker->randomFloat(null,0,5),
+        'review' => 'He is nice and handsome',
+        'patient_id' => $faker->numberBetween(1, 50),
+        'doctor_id' => $faker->numberBetween(1, 50),
     ];
 });

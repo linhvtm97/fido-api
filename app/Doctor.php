@@ -36,4 +36,7 @@ class Doctor extends Model
     public function employee(){
         return $this->belongsTo(Employee::class, 'fk_employee_id');
     }
+    public function ratings(){
+        return $this->hasMany(Rating::class);
+    }
 }
