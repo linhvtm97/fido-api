@@ -2,6 +2,9 @@
 
 namespace App\Library;
 
+use App\Http\Resources\DoctorResource;
+use App\Doctor;
+
 class MyFunctions
 {
     public static function importcsvToDB($filePath, $model)
@@ -41,5 +44,13 @@ class MyFunctions
         $pms = json_decode($out, true);
         $url = $pms["data"]["link"];
         return $url;
+    }
+    public static function updateRating($star, $doctor_id)
+    {
+        $doctor = Doctor::findOrFail($doctor_id);
+        if ($doctor) {
+            $doctor->rating = ($doctor->rating + $star) / 2;
+            $doctor->save();
+        } else return response()->json(['status_code' => 401]);
     }
 }

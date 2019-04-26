@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
         $this->call(CertificateSeeder::class);
         $this->call(AdminSeeder::class);
+        $this->call(RatingSeeder::class);
     }
 }
