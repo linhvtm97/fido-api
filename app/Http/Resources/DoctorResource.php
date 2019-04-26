@@ -3,10 +3,6 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Specialist;
-use App\Address;
-use App\Certificate;
-use App\Doctor;
 
 class DoctorResource extends JsonResource
 {
@@ -32,13 +28,18 @@ class DoctorResource extends JsonResource
             "id_number_date" => $this->id_number_date,
             "phone_number" => $this->phone_number,
             "email" => $this->email,
-            "address" => Address::find($this->address_id)->name,
-            "specialist" => Specialist::find($this->specialist_id)->name,
-            "sub_specialist" => Specialist::find($this->sub_speialist_id)->name,
+            "address_id"=>$this->address->id,
+            "address_name"=>$this->address->name,
+            "specialist_id"=>$this->specialist->id,
+            "specialist_name"=>$this->specialist->name,
+            "sub_specialist_id"=>$this->sub_specialist->id,
+            "sub_specialist_name"=>$this->sub_specialist->name,
             "hospital_name" => $this->hospital_name,
             "address_details" => $this->address_details,
             "longtatude" => $this->longtatude,
             "latitude" => $this->latitude,
+            "employee_id" => $this->employee->id,
+            "employee_name" => $this->employee->name,
         ];
     }
 }
