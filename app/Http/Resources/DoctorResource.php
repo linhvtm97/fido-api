@@ -40,6 +40,9 @@ class DoctorResource extends JsonResource
             "latitude" => $this->latitude,
             "employee_id" => $this->employee->id,
             "employee_name" => $this->employee->name,
+            "rating" => $this->rating,
+            "review" => $this->ratings,
+            "actived" => $this->actived,
         ];
     }
 }
