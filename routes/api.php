@@ -38,7 +38,7 @@ Route::group(['middleware' => ['cors', 'api']], function () {
         'create', 'edit'
     ]);
 
-    Route::resource('doctors.certificates', 'DoctorsCertificatesController')->except([
+    Route::resource('doctors.certificates', 'DoctorCertificateController')->except([
         'create', 'edit'
     ]);
 

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Resources\MyResource;
-use App\Http\Resources\MyCollection;
 use Validator;
 use App\Library\MyFunctions;
 use App\Http\Resources\DoctorResource;
@@ -44,8 +43,8 @@ class MyController extends Controller
                 $object->save();
             }
             if ($model == 'App\\Doctor') {
-                    return new DoctorResource($object);
-                }
+                return new DoctorResource($object);
+            }
             return new MyResource($object);
         }
     }
@@ -84,8 +83,8 @@ class MyController extends Controller
             }
             $object->update($data);
             if ($model == 'App\\Doctor') {
-                    return new DoctorResource($object);
-                }
+                return new DoctorResource($object);
+            }
             return new MyResource($object);
         }
         return response()->json(['status_code' => 'FAIL']);

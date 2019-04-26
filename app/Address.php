@@ -9,4 +9,5 @@ class Address extends Model
     protected $fillable = [
         'name', 'code',
     ];
+
 }
