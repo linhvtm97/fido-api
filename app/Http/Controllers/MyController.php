@@ -9,6 +9,7 @@ use App\Library\MyFunctions;
 use App\Http\Resources\DoctorResource;
 use App\Http\Resources\MyCollection;
 use App\Doctor;
+use App\User;
 
 class MyController extends Controller
 {
@@ -20,7 +21,7 @@ class MyController extends Controller
     public static function index($model)
     {
         return response()->json([
-            'status_code' => $model::all() == null ? 304 : 200, 'data' => new MyCollection($model::paginate())
+            'status_code' => $model::all() == null ? 304 : 200, 'data' => new MyCollection($model::all())
         ]);
     }
 
@@ -41,6 +42,14 @@ class MyController extends Controller
         }
         $object = $model::create($request->all());
         if ($object) {
+            User::create([
+                'user_status' => 'actived',
+                'name' => $object->name,
+                'email' => $object->email,
+                'usable_id' => $object->id,
+                'usable_type' => $model,
+                'password' => 'default123'
+            ]);
             if ($avatar = $request->file('avatar')) {
                 $imageURL = MyFunctions::upload_img($avatar);
                 $object->avatar = $imageURL;
