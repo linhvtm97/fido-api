@@ -17,7 +17,7 @@ class DoctorController extends Controller
      */
     public function index()
     {
-        return new DoctorCollection(Doctor::all());
+        return new DoctorCollection(Doctor::with('address', 'specialist', 'sub_specialist', 'employee')->paginate());
     }
 
     /**
@@ -49,7 +49,7 @@ class DoctorController extends Controller
      */
     public function show($id)
     {
-        return new DoctorResource(Doctor::find($id));
+        return new DoctorResource(Doctor::with('address', 'specialist', 'sub_specialist', 'employee')->find($id));
     }
 
     /**

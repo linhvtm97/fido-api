@@ -7,6 +7,8 @@ use App\Http\Resources\MyResource;
 use Validator;
 use App\Library\MyFunctions;
 use App\Http\Resources\DoctorResource;
+use App\Http\Resources\MyCollection;
+use App\Doctor;
 
 class MyController extends Controller
 {
@@ -17,7 +19,9 @@ class MyController extends Controller
      */
     public static function index($model)
     {
-        return new MyResource($model::all());
+        return response()->json([
+            'status_code' => $model::all()==null?304:200, 'data' => new MyCollection($model::paginate())
+        ]);
     }
 
 
@@ -33,7 +37,7 @@ class MyController extends Controller
 
         if ($validator->fails()) {
             $message = $validator->messages()->getMessages();
-            return response()->json([$message], 401);
+            return response()->json(['status_code' => 202, 'message'=>$message]);
         }
         $object = $model::create($request->all());
         if ($object) {
@@ -43,9 +47,12 @@ class MyController extends Controller
                 $object->save();
             }
             if ($model == 'App\\Doctor') {
-                return new DoctorResource($object);
+                $object = Doctor::with('address', 'specialist', 'sub_specialist', 'employee')->find($object->id);
+                $object->doctor_no= 'BS'.random_int(1000, 9999);
+                $object->save();
+                return response()->json(['status_code' => 201, 'data'=>new DoctorResource($object)]);
             }
-            return new MyResource($object);
+            return response()->json(['status_code' => 201, 'data'=>new MyResource($object)]);
         }
     }
 
@@ -59,9 +66,9 @@ class MyController extends Controller
     {
         $object = $model::find($id);
         if ($object) {
-            return new MyResource($object);
+            return response()->json(['status_code' => 200,'data' => new MyResource($object)]);
         }
-        return response()->json(['status_code' => 'FAIL'], 401);
+        return response()->json(['status_code' => 302]);
     }
 
     /**
@@ -83,11 +90,11 @@ class MyController extends Controller
             }
             $object->update($data);
             if ($model == 'App\\Doctor') {
-                return new DoctorResource($object);
+                return response()->json(['status_code' => 201,'data' => new DoctorResource($object)]);
             }
-            return new MyResource($object);
+            return response()->json(['status_code' => 201,'data' => new MyResource($object)]);
         }
-        return response()->json(['status_code' => 'FAIL']);
+        return response()->json(['status_code' => 202]);
     }
 
     /**
@@ -101,8 +108,8 @@ class MyController extends Controller
         $object = $model::find($id);
         if ($object) {
             $object->delete();
-            return response()->json(['status_code' => 'PASS']);
+            return response()->json(['status_code' => 204,'data' => new MyResource($object)]);
         }
-        return response()->json(['status_code' => 'FAIL']);
+        return response()->json(['status_code' => 202,'data' => new MyResource($object)]);
     }
 }
