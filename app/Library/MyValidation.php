@@ -18,7 +18,6 @@ class MyValidation
 
     public static $ruleDoctor = array(
         'name' => 'required',
-        'doctor_no' => 'required|unique:doctors',
         'id_number' => 'required|unique:doctors',
         'email' => 'required|unique:doctors',        
     );
@@ -54,8 +53,7 @@ class MyValidation
 
     public static $messageDoctor = array(
         'name' => 'Name is required',
-        'email' => 'Email is required',
-        'doctor_no' => 'Doctor number is required',
+        'email' => 'Email is required'
     );
 
     public static $messagePatient = array(

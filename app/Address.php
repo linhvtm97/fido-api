@@ -10,4 +10,5 @@ class Address extends Model
         'name', 'code',
     ];
 
+    protected $hidden = ['created_at', 'updated_at'];
 }
