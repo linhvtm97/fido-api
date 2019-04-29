@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Patient extends Model
 {
     protected $fillable = [
-        'name', 'email', 'phone_number', 'gender', 'birthday', 'avatar', 'fk_address_id', 'id_number',
+        'name', 'email', 'phone_number', 'gender', 'birthday', 'avatar', 'address_id', 'id_number','id_number_place', 'id_number_date'
     ];
 
     protected $hidden = [
