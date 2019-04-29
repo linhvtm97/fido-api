@@ -35,7 +35,7 @@ class MyController extends Controller
     public static function store(Request $request, $model, $rule, $message)
     {
         $validator = Validator::make($request->all(), $rule, $message);
-
+        var_dump($request->all());
         if ($validator->fails()) {
             $message = $validator->messages()->getMessages();
             return response()->json(['status_code' => 202, 'message' => $message]);
