@@ -15,10 +15,11 @@ class RatingResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'star' => $this->star,
             'review' => $this->review,
             'doctor_id' => $this->doctor_id,
-            'patient_name' => $this->patient->name,
+            'patient_name' => $this->patient_name,
         ];
     }
 }

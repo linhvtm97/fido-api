@@ -16,7 +16,7 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             $message = $validator->messages()->getMessages();
-            return response()->json([$message, 'status_code' => 401], 401);
+            return response()->json([$message, 'status_code' => 403], 403);
         }
         $data = $request->all();
         $user = User::create($data);

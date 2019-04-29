@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Resources\MyResource;
-use Validator;
 use App\Library\MyFunctions;
 use App\Http\Resources\DoctorResource;
 use App\Http\Resources\MyCollection;
 use App\Doctor;
 use App\User;
+use App\Library\MyValidation;
+use DB;
+use Validator;
 
 class MyController extends Controller
 {
@@ -25,7 +27,6 @@ class MyController extends Controller
         ]);
     }
 
-
     /**
      * Store a newly created resource in storage.
      *
@@ -34,8 +35,10 @@ class MyController extends Controller
      */
     public static function store(Request $request, $model, $rule, $message)
     {
+        if(DB::table('users')->where('email', $request['email'])->first()){
+            return response()->json(['status_code' => 202, 'message' => 'Email has already taken']);
+        }
         $validator = Validator::make($request->all(), $rule, $message);
-        var_dump($request->all());
         if ($validator->fails()) {
             $message = $validator->messages()->getMessages();
             return response()->json(['status_code' => 202, 'message' => $message]);
@@ -58,6 +61,7 @@ class MyController extends Controller
             if ($model == 'App\\Doctor') {
                 $object = Doctor::with('address', 'specialist', 'sub_specialist', 'employee')->find($object->id);
                 $object->doctor_no = 'BS' . random_int(1000, 9999);
+                $object->rating = 3.2;
                 $object->save();
                 return response()->json(['status_code' => 201, 'data' => new DoctorResource($object)]);
             }
@@ -77,7 +81,7 @@ class MyController extends Controller
         if ($object) {
             return response()->json(['status_code' => 200, 'data' => new MyResource($object)]);
         }
-        return response()->json(['status_code' => 401], 401);
+        return response()->json(['status_code' => 401, 'message' => 'ID not found'], 401);
     }
 
     /**
@@ -103,7 +107,7 @@ class MyController extends Controller
             }
             return response()->json(['status_code' => 201, 'data' => new MyResource($object)]);
         }
-        return response()->json(['status_code' => 202]);
+        return response()->json(['status_code' => 202, 'message' => 'ID not found']);
     }
 
     /**
@@ -117,8 +121,8 @@ class MyController extends Controller
         $object = $model::find($id);
         if ($object) {
             $object->delete();
-            return response()->json(['status_code' => 204, 'data' => new MyResource($object)]);
+            return response()->json(['status_code' => 204]);
         }
-        return response()->json(['status_code' => 202, 'data' => new MyResource($object)]);
+        return response()->json(['status_code' => 202, 'message' => 'ID not found']);
     }
 }

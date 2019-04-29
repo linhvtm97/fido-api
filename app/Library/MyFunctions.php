@@ -2,7 +2,6 @@
 
 namespace App\Library;
 
-use App\Http\Resources\DoctorResource;
 use App\Doctor;
 
 class MyFunctions

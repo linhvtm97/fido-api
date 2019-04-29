@@ -41,9 +41,12 @@ $factory->define(Doctor::class, function (Faker $faker) {
         'address_id' => $faker->numberBetween(1,50),
         'fk_employee_id' => $faker->numberBetween(1,20),
         'hospital_name' => 'BV Trung Ương Huế ',
-        'specialist_id' => $faker->numberBetween(2,40),
+        'specialist_id' => $faker->numberBetween(2,20),
         'email' =>$faker->email,
-        'sub_specialist_id' => $faker->numberBetween(2,40),
+        'sub_specialist_id' => $faker->numberBetween(2,20),
+        'actived' => 1,
+        'rating' => 3.2,
+
     ];
 });
 
@@ -114,5 +117,6 @@ $factory->define(Rating::class, function (Faker $faker) {
         'review' => 'He is nice and handsome',
         'patient_id' => $faker->numberBetween(1, 50),
         'doctor_id' => $faker->numberBetween(1, 50),
+        'patient_name' => $faker->name,
     ];
 });

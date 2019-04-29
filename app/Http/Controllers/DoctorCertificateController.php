@@ -8,6 +8,8 @@ use App\Http\Resources\MyCollection;
 use App\Certificate;
 use App\Library\MyFunctions;
 use App\Http\Resources\MyResource;
+use Validator;
+use App\Library\MyValidation;
 
 class DoctorCertificateController extends Controller
 {
@@ -39,6 +41,11 @@ class DoctorCertificateController extends Controller
      */
     public function store(Request $request, $doctor_id)
     {
+        $validator = Validator::make($request->all(), MyValidation::$ruleCertificate, MyValidation::$messageCertificate);
+        if ($validator->fails()) {
+            $message = $validator->messages()->getMessages();
+            return response()->json(['status_code' => 202, 'message' => $message]);
+        }
         $certificate = Certificate::create($request->all());
         if ($certificate) {
             if ($image = $request->file('image')) {
@@ -47,8 +54,9 @@ class DoctorCertificateController extends Controller
                 $certificate->doctor_id = $doctor_id;
                 $certificate->save();
             }
-            return new MyResource($certificate);
+            return response()->json(['status_code' => 201, 'data' => new MyResource($certificate)]);
         }
+        return response()->json(['status_code' => 202, 'message' => 'Can not create']);
     }
 
     /**
@@ -61,9 +69,9 @@ class DoctorCertificateController extends Controller
     {
         $certificate = Doctor::find($doctor_id)->certificates()->find($id);
         if ($certificate) {
-            return new MyResource($certificate);
+            return response()->json(['status_code' => 200, 'data' => new MyResource($certificate)]);
         }
-        return response()->json(['status_code' => 401], 401);
+        return response()->json(['status_code' => 401, 'message' => 'ID not found'], 401);
     }
 
     /**
@@ -95,9 +103,9 @@ class DoctorCertificateController extends Controller
                 $certificate->save();
             }
             $certificate->update($data);
-            return new MyResource($certificate);
+            return response()->json(['status_code' => 201, 'data' => new MyResource($certificate)]);
         }
-        return response()->json(['status_code' => 202]);
+        return response()->json(['status_code' => 401, 'message' => 'ID not found']);
     }
 
     /**
@@ -113,6 +121,6 @@ class DoctorCertificateController extends Controller
             $certificate->delete();
             return response()->json(['status_code' => 204]);
         }
-        return response()->json(['status_code' => 202]);
+        return response()->json(['status_code' => 401, 'message' => 'ID not found']);
     }
 }

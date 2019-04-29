@@ -17,7 +17,7 @@ class DoctorController extends Controller
      */
     public function index()
     {
-        return new DoctorCollection(Doctor::with('address', 'specialist', 'sub_specialist', 'employee', 'ratings')->paginate());
+        return new DoctorCollection(Doctor::with('address', 'specialist', 'sub_specialist', 'employee', 'ratings')->get());
     }
 
     /**

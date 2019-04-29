@@ -34,6 +34,10 @@ class MyValidation
         'id_number' => 'required|unique:patients',
         'email' => 'required|unique:patients',        
     );
+    public static $ruleCertificate = array(
+        'name' => 'required',
+        'image' => 'required',    
+    );
 
     public static $messageUser = array(
         'name' => 'Name is missing',
@@ -60,6 +64,10 @@ class MyValidation
         'name' => 'Name is required',
         'email' => 'Email is required',
         'id_number' => 'ID number is required',
+    );
+    public static $messageCertificate = array(
+        'name' => 'Name is required',
+        'image' => 'Image is required'
     );
     
 
