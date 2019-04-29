@@ -62,7 +62,6 @@ class MyController extends Controller
                 $object = Doctor::with('address', 'specialist', 'sub_specialist', 'employee')->find($object->id);
                 $object->doctor_no = 'BS' . random_int(1000, 9999);
                 $object->rating = 3.2;
-                $object->actived = 0;
                 $object->save();
                 return response()->json(['status_code' => 201, 'data' => new DoctorResource($object)]);
             }
