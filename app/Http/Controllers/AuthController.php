@@ -25,6 +25,10 @@ class AuthController extends Controller
         $model_name = $user->usable_type;
         $role = $model_name::create($data);
         $user->usable_id = $role->id;
+        if($model_name=='App\\Doctor'){
+            $role->actived = 0;
+            $role->save();
+        }
         $user->save();
 
         $token = auth()->login($user);
