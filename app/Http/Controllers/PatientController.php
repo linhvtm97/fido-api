@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Validator;
 use App\Library\MyValidation;
+use DB;
 
 class PatientController extends Controller
 {

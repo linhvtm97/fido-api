@@ -54,7 +54,7 @@ class AuthController extends Controller
     {
         auth()->logout();
 
-        return response()->json(['status_code' => 'PASS']);
+        return response()->json(['status_code' => 200]);
     }
 
     protected function respondWithToken($token, $user)
