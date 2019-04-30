@@ -20,6 +20,8 @@ class RatingResource extends JsonResource
             'review' => $this->review,
             'doctor_id' => $this->doctor_id,
             'patient_name' => $this->patient_name,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }
