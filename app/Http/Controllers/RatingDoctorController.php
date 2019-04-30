@@ -47,7 +47,7 @@ class RatingDoctorController extends Controller
         MyFunctions::updateRating($data['star'], $doctor_id);
         $rating = Rating::create($data);
         if ($rating) {
-            $rating->patient_name = Patient::find($data['patient_id'])->first()->name;
+            $rating->patient_name = Patient::findOrFail($rating->patient_id)->name;
             $rating->doctor_id = $doctor_id;
             $rating->save();
 

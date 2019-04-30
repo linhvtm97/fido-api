@@ -8,6 +8,4 @@ class Rating extends Model
 {
     protected $fillable = ['star', 'patient_id', 'doctor_id', 'review', 'patient_name'];
 
-    protected $hidden = ['created_at', 'updated_at'];
-
 }
