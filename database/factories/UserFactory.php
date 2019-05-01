@@ -28,7 +28,7 @@ $factory->define(Doctor::class, function (Faker $faker) {
         'name' => $faker->name,
         'status' => 'offline',
         'doctor_no' => 'BS' .$doctor_number++,
-        'avatar' => 'https://i.imgur.com/uAsxwDI.jpg',
+        'avatar' => 'https://i.imgur.com/CISRbZi.jpg',
         'birthday' => $faker->date($format = 'Y-m-d', $max = '1996'),
         'gender' => 'Male',
         'id_number' => $faker->numberBetween(10000000, 99999999),
@@ -46,7 +46,8 @@ $factory->define(Doctor::class, function (Faker $faker) {
         'sub_specialist_id' => $faker->numberBetween(2,20),
         'actived' => 1,
         'rating' => 3.2,
-
+        'description'=> $faker->text(200),
+        'experience' => $faker->text(200),
     ];
 });
 

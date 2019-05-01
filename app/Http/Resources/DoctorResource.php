@@ -28,12 +28,12 @@ class DoctorResource extends JsonResource
             "id_number_date" => $this->id_number_date,
             "phone_number" => $this->phone_number,
             "email" => $this->email,
-            "address_id"=>$this->address->id,
-            "address_name"=>$this->address->name,
-            "specialist_id"=>$this->specialist->id,
-            "specialist_name"=>$this->specialist->name,
-            "sub_specialist_id"=>$this->sub_specialist->id,
-            "sub_specialist_name"=>$this->sub_specialist->name,
+            "address_id" => $this->address->id,
+            "address_name" => $this->address->name,
+            "specialist_id" => $this->specialist->id,
+            "specialist_name" => $this->specialist->name,
+            "sub_specialist_id" => $this->sub_specialist->id,
+            "sub_specialist_name" => $this->sub_specialist->name,
             "hospital_name" => $this->hospital_name,
             "address_details" => $this->address_details,
             "longtatude" => $this->longtatude,
@@ -43,6 +43,8 @@ class DoctorResource extends JsonResource
             "rating" => $this->rating,
             "review" => $this->ratings,
             "actived" => $this->actived,
+            "title" => $this->title,
+            "experience" => $this->experience,
         ];
     }
 }
