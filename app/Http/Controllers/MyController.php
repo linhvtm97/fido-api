@@ -23,7 +23,7 @@ class MyController extends Controller
     public static function index($model)
     {
         return response()->json([
-            'status_code' => $model::all() == null ? 304 : 200, 'data' => new MyCollection($model::all())
+            'status_code' => $model::all() == null ? 304 : 200, 'data' => new MyCollection($model::orderBy('id', 'asc')->get())
         ]);
     }
 
@@ -100,12 +100,12 @@ class MyController extends Controller
         $object = $model::find($id);
         if ($object) {
             $data = $request->all();
+            $object->update($data);
             if ($avatar = $request->file('avatar')) {
                 $imageURL = MyFunctions::upload_img($avatar);
                 $object->avatar = $imageURL;
                 $object->save();
             }
-            $object->update($data);
             if ($model == 'App\\Doctor') {
                 return response()->json(['status_code' => 201, 'data' => new DoctorResource($object)]);
             }
