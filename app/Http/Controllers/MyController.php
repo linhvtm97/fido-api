@@ -120,7 +120,11 @@ class MyController extends Controller
     {
         $object = $model::find($id);
         if ($object) {
+            $user = User::where([
+                ['usable_id', '=', $id],
+                ['usable_type', '=', $model]])->first();
             $object->delete();
+            $user->delete();
             return response()->json(['status_code' => 204]);
         }
         return response()->json(['status_code' => 202, 'message' => 'ID not found']);
