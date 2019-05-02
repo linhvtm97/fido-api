@@ -73,7 +73,7 @@ $factory->define(Employee::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
         'status' => 'offline',
-        'created_by_user' => $faker->numberBetween(1, 50),
+        'created_by_user' => $faker->numberBetween(1, 20),
         'employee_no' => 'NV' . $employee_number++,
         'avatar' => 'https://i.imgur.com/On6cerN.jpg',
         'birthday' => $faker->date($format = 'Y-m-d', $max = '1996'),
@@ -98,8 +98,8 @@ $factory->define(User::class, function (Faker $faker) {
         'user_status' => 'actived',
         'email' => $faker->email,
         'password' => bcrypt('linhtinh123'),
-        'usable_id' => $faker->unique()->numberBetween(1, 50),
-        'usable_type' => 'App\Doctor',
+        'usable_id' => $faker->unique()->numberBetween(1, 20),
+        'usable_type' => 'App\Employee',
     ];
 });
 
@@ -108,7 +108,7 @@ $factory->define(Certificate::class, function (Faker $faker) {
         'name' => 'Giấy chứng nhận tốt nghiệp Đại học Y Hà Nội',
         'image' => 'https://imgur.com/088eeVL',
         'description' => $faker->text(),
-        'doctor_id' => $faker->unique()->numberBetween(1, 50),
+        'doctor_id' => $faker->unique()->numberBetween(1, 20),
     ];
 });
 
@@ -116,8 +116,8 @@ $factory->define(Rating::class, function (Faker $faker) {
     return [
         'star' => $faker->randomFloat(null,0,5),
         'review' => 'He is nice and handsome',
-        'patient_id' => $faker->numberBetween(1, 50),
-        'doctor_id' => $faker->numberBetween(1, 50),
+        'patient_id' => $faker->numberBetween(1, 20),
+        'doctor_id' => $faker->numberBetween(1, 20),
         'patient_name' => $faker->name,
     ];
 });

@@ -20,7 +20,12 @@ class DoctorCertificateController extends Controller
      */
     public function index($doctor_id)
     {
-        return new MyCollection(Doctor::find($doctor_id)->certificates()->get());
+        $doctor = Doctor::find($doctor_id);
+        if($doctor){
+            return new MyCollection($doctor->certificates()->get());
+        }
+        return response()->json(['status_code' => 401, 'message' => 'ID not found'], 401);
+        
     }
 
     /**

@@ -22,8 +22,12 @@ class RatingDoctorController extends Controller
      */
     public function index($doctor_id)
     {
-        // return Rating::all();
-        return new RatingCollection(Doctor::find($doctor_id)->ratings()->get());
+        $doctor = Doctor::find($doctor_id);
+        if($doctor){
+            return new RatingCollection($doctor->ratings()->get());
+        }
+        return response()->json(['status_code' => 401, 'message' => 'ID not found'], 401);
+        
     }
 
     /**
