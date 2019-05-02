@@ -10,6 +10,8 @@ use App\Library\MyFunctions;
 use App\Http\Resources\RatingResource;
 use App\Http\Resources\RatingCollection;
 use App\Patient;
+use App\Library\MyValidation;
+use Validator;
 
 class RatingDoctorController extends Controller
 {
@@ -43,7 +45,11 @@ class RatingDoctorController extends Controller
     public function store(Request $request, $doctor_id)
     {
         $data = $request->all();
-
+        $validator = Validator::make($request->all(), MyValidation::$ruleRating, MyValidation::$messageRating);
+        if ($validator->fails()) {
+            $message = $validator->messages()->getMessages();
+            return response()->json(['status_code' => 202, 'message' => $message]);
+        }
         MyFunctions::updateRating($data['star'], $doctor_id);
         $rating = Rating::create($data);
         if ($rating) {
@@ -113,7 +119,7 @@ class RatingDoctorController extends Controller
      */
     public function destroy($doctor_id, $id)
     {
-        $rating = Doctor::find($doctor_id) - ratings()->find($id);
+        $rating = Doctor::find($doctor_id)->ratings()->find($id);
         if ($rating) {
             $rating->delete();
             return response()->json(['status_code' => 204]);

@@ -65,6 +65,10 @@ class MyController extends Controller
                 $object->save();
                 return response()->json(['status_code' => 201, 'data' => new DoctorResource($object)]);
             }
+            if($model == 'App\\Employee'){
+                $object->employee_no = 'NV'.$object->id;
+                $object->save();
+            }
             return response()->json(['status_code' => 201, 'data' => new MyResource($object)]);
         }
     }
@@ -119,10 +123,10 @@ class MyController extends Controller
     public static function destroy($id, $model)
     {
         $object = $model::find($id);
-        if ($object) {
-            $user = User::where([
-                ['usable_id', '=', $id],
-                ['usable_type', '=', $model]])->first();
+        $user = User::where([
+            ['usable_id', '=', $id],
+            ['usable_type', '=', $model]])->first();
+        if ($object && $user) { 
             $object->delete();
             $user->delete();
             return response()->json(['status_code' => 204]);

@@ -19,25 +19,28 @@ class MyValidation
     public static $ruleDoctor = array(
         'name' => 'required',
         'id_number' => 'required|unique:doctors',
-        'email' => 'required|unique:doctors',        
+        'email' => 'required|unique:doctors',
     );
 
     public static $ruleEmployee = array(
         'name' => 'required',
-        'employee_no' => 'required|unique:employees',
         'id_number' => 'required|unique:employees',
         'email' => 'required|unique:employees',
-        
+
     );
     public static $rulePatient = array(
         'name' => 'required',
         'id_number' => 'required|unique:patients',
-        'email' => 'required|unique:patients',        
+        'email' => 'required|unique:patients',
     );
     public static $ruleCertificate = array(
         'name' => 'required',
-        'image' => 'required',    
+        'image' => 'required',
     );
+    public static $ruleRating = array(
+        'star' => 'required',
+    );
+
 
     public static $messageUser = array(
         'name' => 'Name is missing',
@@ -69,13 +72,14 @@ class MyValidation
         'name' => 'Name is required',
         'image' => 'Image is required'
     );
-    
+
+    public static $messageRating = array(
+        'star' => 'Star is required'
+    );
 
     public static $messageEmployee = array(
         'name' => 'Name is required',
         'email' => 'Email is required',
         'id_number' => 'ID number is required',
-        'employee_no' => 'Employee number is required',
     );
-
 }
