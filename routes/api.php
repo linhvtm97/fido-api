@@ -2,6 +2,8 @@
 use App\Specialist;
 use App\Address;
 use App\Http\Resources\MyResource;
+use App\Http\Resources\DoctorCollection;
+use App\Doctor;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,5 +60,9 @@ Route::group(['middleware' => ['cors', 'api']], function () {
 
     Route::get('specialists', function () {
         return new MyResource(Specialist::all());
+    });
+
+    Route::get('doctors-pagination', function () {
+        return new DoctorCollection(Doctor::with('address', 'specialist', 'sub_specialist', 'employee', 'ratings')->where('actived', '=', 1)->orderBy('id', 'asc')->paginate(10));
     });
 });
