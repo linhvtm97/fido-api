@@ -11,11 +11,15 @@ class SearchController extends Controller
 {
     public function search(Request $request)
     {
-        $data = $request->all();
-        $doctors = DB::table('doctors')->where('name', 'LIKE', '%'.$data['name'].'%')
+        $data = array(
+            'name' => $request->name,
+            'specialist_id' => $request->specialist_id,
+            'address_id' => $request->address_id
+        );
+        $doctors = Doctor::with('address', 'specialist', 'sub_specialist', 'employee', 'ratings')->where('name', 'LIKE', '%'.$data['name'].'%')
             ->orWhere('specialist_id', '=', $data['specialist_id'])
             ->orWhere('address_id', '=', $data['address_id'])
-            ->orderBy('id', 'asc')->with('address', 'specialist', 'sub_specialist', 'employee', 'ratings')->get();
+            ->orderBy('id', 'asc')->get();
 
         return new DoctorCollection($doctors);
     }
