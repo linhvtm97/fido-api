@@ -65,4 +65,6 @@ Route::group(['middleware' => ['cors', 'api']], function () {
     Route::get('doctors-pagination', function () {
         return new DoctorCollection(Doctor::with('address', 'specialist', 'sub_specialist', 'employee', 'ratings')->where('actived', '=', 1)->orderBy('id', 'asc')->paginate(10));
     });
+
+    Route::post('/search', 'SearchController@search');
 });
