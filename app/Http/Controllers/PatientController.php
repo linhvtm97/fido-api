@@ -15,7 +15,7 @@ class PatientController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    {;
         return MyController::index('App\\Patient');
     }
 
