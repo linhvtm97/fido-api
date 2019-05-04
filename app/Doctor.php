@@ -10,7 +10,7 @@ class Doctor extends Model
         'name', 'email', 'phone_number', 'status', 'id_number', 'id_number_place', 'id_number_date', 'gender',
         'birthday', 'avatar', 'address_id', 'fk_employee_id', 'created_by_user', 'doctor_no', 'specialist_id',
         'sub_specialist_id','hospital_name', 'passport_no', 'passport_place', 'passport_date', 'description',
-        'experience', 'address_details'
+        'experience', 'address_details', 'longtatude', 'latitude', 
     ];
 
     protected $hidden = [

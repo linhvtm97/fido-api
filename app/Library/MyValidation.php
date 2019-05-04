@@ -26,7 +26,6 @@ class MyValidation
         'name' => 'required',
         'id_number' => 'required|unique:employees',
         'email' => 'required|unique:employees',
-
     );
     public static $rulePatient = array(
         'name' => 'required',
