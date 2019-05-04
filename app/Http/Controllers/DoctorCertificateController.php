@@ -102,12 +102,12 @@ class DoctorCertificateController extends Controller
         $certificate = Doctor::find($doctor_id)->certificates()->find($id);
         if ($certificate) {
             $data = $request->all();
+            $certificate->update($data);
             if ($image = $request->file('image')) {
                 $imageURL = MyFunctions::upload_img($image);
                 $certificate->image = $imageURL;
                 $certificate->save();
             }
-            $certificate->update($data);
             return response()->json(['status_code' => 201, 'data' => new MyResource($certificate)]);
         }
         return response()->json(['status_code' => 401, 'message' => 'ID not found']);
