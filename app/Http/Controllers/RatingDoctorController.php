@@ -48,21 +48,27 @@ class RatingDoctorController extends Controller
      */
     public function store(Request $request, $doctor_id)
     {
+        
         $data = $request->all();
         $validator = Validator::make($request->all(), MyValidation::$ruleRating, MyValidation::$messageRating);
         if ($validator->fails()) {
             $message = $validator->messages()->getMessages();
             return response()->json(['status_code' => 202, 'message' => $message]);
         }
-        MyFunctions::updateRating($data['star'], $doctor_id);
+        if(!$doctor = Doctor::find($doctor_id)){
+            return response()->json(['status_code' => 404, 'message'=> 'ID doctor not found']);
+        }
+        if(!$patient = Patient::find($request->patient_id)){
+            return response()->json(['status_code' => 404, 'message'=> 'ID patient not found']);
+        }
         $rating = Rating::create($data);
+        MyFunctions::updateRating($rating->star, $rating->like, $doctor_id);
         if ($rating) {
-            $patient = Patient::findOrFail($rating->patient_id)->first(); 
+            $rating->like = ($rating->like == null) ? 0 : $rating->like;
             $rating->patient_name = $patient->name;
             $rating->patient_avatar = $patient->avatar;
             $rating->doctor_id = $doctor_id;
             $rating->save();
-
             return response()->json(['status_code' => 200, 'data' => new RatingResource($rating)]);
         }
         return response()->json(['status_code' => 302, 'message'=> 'Can not create']);
@@ -104,11 +110,20 @@ class RatingDoctorController extends Controller
      */
     public function update(Request $request, $doctor_id, $id)
     {
-        $rating = Doctor::find($doctor_id)->ratings()->get()->find($id);
+        if(!$doctor = Doctor::find($doctor_id)){
+            return response()->json(['status_code' => 404, 'message'=> 'ID doctor not found']);
+        }
+        if(!$patient = Patient::find($request->patient_id)){
+            return response()->json(['status_code' => 404, 'message'=> 'ID patient not found']);
+        }
+        $rating = $doctor->ratings()->get()->find($id);
         if ($rating) {
             $data = $request->all();
-            MyFunctions::updateRating($data['star'], $doctor_id);
+            MyFunctions::updateRating($rating->star, $rating->like, $doctor_id);
             $rating->update($data);
+            $rating->patient_name = $patient->name;
+            $rating->patient_avatar = $patient->avatar;
+            $rating->save();
             return response()->json(['status_code' => 200, 'data' => new RatingResource($rating)]);
         }
         return response()->json([

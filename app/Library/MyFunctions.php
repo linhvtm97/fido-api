@@ -44,11 +44,12 @@ class MyFunctions
         $url = $pms["data"]["link"];
         return $url;
     }
-    public static function updateRating($star, $doctor_id)
+    public static function updateRating($star, $like, $doctor_id)
     {
         $doctor = Doctor::findOrFail($doctor_id);
         if ($doctor) {
             $doctor->rating = ($doctor->rating + $star) / 2;
+            $doctor->likes += $like == null ? 0 : $like;
             $doctor->save();
         } else return response()->json(['status_code' => 401]);
     }

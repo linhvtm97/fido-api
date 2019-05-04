@@ -120,5 +120,6 @@ $factory->define(Rating::class, function (Faker $faker) {
         'doctor_id' => $faker->numberBetween(1, 20),
         'patient_name' => $faker->name,
         'patient_avatar' => 'https://i.imgur.com/UqgVwRl.jpg',
+        'like' => 1,
     ];
 });
