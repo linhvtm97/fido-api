@@ -17,7 +17,7 @@ class DoctorController extends Controller
      */
     public function index()
     {
-        return new DoctorCollection(Doctor::with('address', 'specialist', 'sub_specialist', 'employee', 'ratings')->where('actived', '=', 1)->orderBy('id', 'asc')->get());
+        return new DoctorCollection(Doctor::with('address', 'specialist', 'sub_specialist', 'employee', 'ratings')->orderBy('id', 'asc')->get());
     }
 
     /**
