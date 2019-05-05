@@ -24,7 +24,7 @@ class SearchController extends Controller
             array_push($condition1, array('specialist_id', '=', $data['specialist_id']));
         }
         if ($data['name']) {
-            array_push($condition1, array('name', 'LIKE', '%' . $data['name'].'%'));
+            array_push($condition1, array('name', 'LIKE',  '%'.($data['name']).'%'));
         }
         $doctors = Doctor::with('address', 'specialist', 'sub_specialist', 'employee', 'ratings')->where($condition1)->paginate(10);
         return new DoctorCollection($doctors);}
