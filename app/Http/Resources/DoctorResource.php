@@ -35,6 +35,7 @@ class DoctorResource extends JsonResource
             "sub_specialist_id" => empty($this->sub_specialist->id) ? null : $this->sub_specialist->id,
             "sub_specialist_name" => empty($this->sub_specialist->name) ? null : $this->sub_specialist->name,
             "hospital_name" => $this->hospital_name,
+            "office" => $this->office,
             "address_details" => $this->address_details,
             "longtatude" => $this->longtatude,
             "latitude" => $this->latitude,

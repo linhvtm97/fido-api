@@ -35,7 +35,7 @@ class MyController extends Controller
      */
     public static function store(Request $request, $model, $rule, $message)
     {
-        if(DB::table('users')->where('email', $request['email'])->first()){
+        if (DB::table('users')->where('email', $request['email'])->first()) {
             return response()->json(['status_code' => 202, 'message' => 'Email has already taken']);
         }
         $validator = Validator::make($request->all(), $rule, $message);
@@ -60,13 +60,13 @@ class MyController extends Controller
             }
             if ($model == 'App\\Doctor') {
                 $object = Doctor::with('address', 'specialist', 'sub_specialist', 'employee')->find($object->id);
-                $object->doctor_no = 'BS'.$object->id;
+                $object->doctor_no = 'BS' . $object->id;
                 $object->rating = 3.2;
                 $object->save();
                 return response()->json(['status_code' => 201, 'data' => new DoctorResource($object)]);
             }
-            if($model == 'App\\Employee'){
-                $object->employee_no = 'NV'.$object->id;
+            if ($model == 'App\\Employee') {
+                $object->employee_no = 'NV' . $object->id;
                 $object->save();
             }
             return response()->json(['status_code' => 201, 'data' => new MyResource($object)]);
@@ -125,8 +125,9 @@ class MyController extends Controller
         $object = $model::find($id);
         $user = User::where([
             ['usable_id', '=', $id],
-            ['usable_type', '=', $model]])->first();
-        if ($object && $user) { 
+            ['usable_type', '=', $model]
+        ])->first();
+        if ($object && $user) {
             $object->delete();
             $user->delete();
             return response()->json(['status_code' => 204]);
