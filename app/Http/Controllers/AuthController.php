@@ -28,6 +28,7 @@ class AuthController extends Controller
         if($model_name=='App\\Doctor'){
             $role->actived = 0;
             $role->doctor_no = 'BS'.$role->id;
+            $role->email = $user->email;
             $role->save();
         }
         $user->save();
