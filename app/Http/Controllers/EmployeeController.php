@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Library\MyValidation;
+use App\Http\Resources\MyCollection;
+use App\Employee;
+use App\Http\Resources\EmployeeCollection;
 
 class EmployeeController extends Controller
 {
@@ -14,7 +17,7 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        return MyController::index('App\\Employee');
+        return new EmployeeCollection(Employee::with('address')->get());
     }
 
     /**

@@ -66,5 +66,13 @@ Route::group(['middleware' => ['cors', 'api']], function () {
         return new DoctorCollection(Doctor::with('address', 'specialist', 'sub_specialist', 'employee', 'ratings')->where('actived', '=', 1)->orderBy('id', 'asc')->paginate(10));
     });
 
+    Route::prefix('/patients')->group(function () {
+        Route::post('/search', 'SearchController@searchPatient');
+    });
+
+    Route::prefix('/employees')->group(function () {
+        Route::post('/search', 'SearchController@searchEmployee');
+    });
+
     Route::post('/search', 'SearchController@search');
 });
