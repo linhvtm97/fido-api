@@ -12,6 +12,8 @@ use App\User;
 use App\Library\MyValidation;
 use DB;
 use Validator;
+use App\Employee;
+use App\Http\Resources\EmployeeResource;
 
 class MyController extends Controller
 {
@@ -108,6 +110,9 @@ class MyController extends Controller
             }
             if ($model == 'App\\Doctor') {
                 return response()->json(['status_code' => 201, 'data' => new DoctorResource($object)]);
+            }
+            if ($model == 'App\\Employee') {
+                return response()->json(['status_code' => 201, 'data' => new EmployeeResource($object)]);
             }
             return response()->json(['status_code' => 201, 'data' => new MyResource($object)]);
         }
