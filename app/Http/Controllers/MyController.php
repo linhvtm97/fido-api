@@ -112,7 +112,8 @@ class MyController extends Controller
                 return response()->json(['status_code' => 201, 'data' => new DoctorResource($object)]);
             }
             if ($model == 'App\\Employee') {
-                return response()->json(['status_code' => 201, 'data' => new EmployeeResource($object)]);
+                dd($object);
+                                return response()->json(['status_code' => 201, 'data' => new EmployeeResource($object)]);
             }
             return response()->json(['status_code' => 201, 'data' => new MyResource($object)]);
         }
