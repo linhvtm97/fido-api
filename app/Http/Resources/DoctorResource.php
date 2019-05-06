@@ -41,7 +41,7 @@ class DoctorResource extends JsonResource
             "latitude" => $this->latitude,
             "employee_id" =>  empty($this->employee->id) ? null : $this->employee->id,
             "employee_name" => empty($this->employee->name) ? null : $this->employee->name,
-            "rating" => $this->rating,
+            "rating" => empty($this->rating) ? 0 : $this->rating,
             "review" => $this->ratings,
             "likes" => $this->likes,
             "numberOfRating" => count($this->ratings),

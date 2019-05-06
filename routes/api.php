@@ -4,6 +4,9 @@ use App\Address;
 use App\Http\Resources\MyResource;
 use App\Http\Resources\DoctorCollection;
 use App\Doctor;
+use App\Http\Resources\MyCollection;
+use App\Http\Resources\RatingCollection;
+use App\Rating;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +73,9 @@ Route::group(['middleware' => ['cors', 'api']], function () {
         Route::post('/search', 'SearchController@searchPatient');
     });
 
+    Route::get('/ratings/reported', function () {
+        return new RatingCollection(Rating::where('report', '=', 1)->orderBy('id', 'asc')->get());
+    });
     Route::prefix('/employees')->group(function () {
         Route::post('/search', 'SearchController@searchEmployee');
     });

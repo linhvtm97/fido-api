@@ -17,7 +17,8 @@ class SearchController extends Controller
         $data = array(
             'name' => $request->name,
             'specialist_id' => $request->specialist_id,
-            'address_id' => $request->address_id
+            'address_id' => $request->address_id,
+            'filter' => $request->filter,
         );
         $condition1 = array(['actived', '=', 1]);
         if ($data['address_id']) {
@@ -29,7 +30,13 @@ class SearchController extends Controller
         if ($data['name']) {
             array_push($condition1, array('name', 'LIKE',  '%' . ($data['name']) . '%'));
         }
-        $doctors = Doctor::with('address', 'specialist', 'sub_specialist', 'employee', 'ratings')->where($condition1)->paginate(10);
+        if ($data['filter']) {
+            array_push($condition1, array('rating', '<>',  null));
+            $doctors = Doctor::with('address', 'specialist', 'sub_specialist', 'employee', 'ratings')->where($condition1)->orderBy('rating', 'desc')->paginate(10);
+        }else
+        {
+            $doctors = Doctor::with('address', 'specialist', 'sub_specialist', 'employee', 'ratings')->where($condition1)->paginate(10);   
+        }
         return new DoctorCollection($doctors);
     }
 
