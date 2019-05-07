@@ -17,6 +17,15 @@ class EmployeeController extends Controller
      */
     public function index()
     {
+        $results = Employee::with('address')->orderBy('id', 'asc')->get();
+        if ($results) {
+            return response()->json([
+                'status_code' => 200, 'data' => new EmployeeCollection($results)
+            ], 200);
+        }
+        return response()->json([
+            'status_code' => 204
+        ], 204);
         return new EmployeeCollection(Employee::with('address')->get());
     }
 

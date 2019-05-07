@@ -24,9 +24,15 @@ class MyController extends Controller
      */
     public static function index($model)
     {
+        $results = $model::orderBy('id', 'asc')->get();
+        if ($results) {
+            return response()->json([
+                'status_code' => 200, 'data' => new MyCollection($results)
+            ], 200);
+        }
         return response()->json([
-            'status_code' => $model::all() == null ? 304 : 200, 'data' => new MyCollection($model::orderBy('id', 'asc')->get())
-        ]);
+            'status_code' => 204
+        ], 204);
     }
 
     /**
@@ -38,12 +44,12 @@ class MyController extends Controller
     public static function store(Request $request, $model, $rule, $message)
     {
         if (DB::table('users')->where('email', $request['email'])->first()) {
-            return response()->json(['status_code' => 202, 'message' => 'Email has already taken']);
+            return response()->json(['status_code' => 202, 'message' => 'Email has already taken'], 202);
         }
         $validator = Validator::make($request->all(), $rule, $message);
         if ($validator->fails()) {
             $message = $validator->messages()->getMessages();
-            return response()->json(['status_code' => 202, 'message' => $message]);
+            return response()->json(['status_code' => 202, 'message' => $message], 202);
         }
         $object = $model::create($request->all());
         if ($object) {
@@ -65,13 +71,13 @@ class MyController extends Controller
                 $object->doctor_no = 'BS' . $object->id;
                 $object->rating = 3.2;
                 $object->save();
-                return response()->json(['status_code' => 201, 'data' => new DoctorResource($object)]);
+                return response()->json(['status_code' => 201, 'data' => new DoctorResource($object)], 201);
             }
             if ($model == 'App\\Employee') {
                 $object->employee_no = 'NV' . $object->id;
                 $object->save();
             }
-            return response()->json(['status_code' => 201, 'data' => new MyResource($object)]);
+            return response()->json(['status_code' => 201, 'data' => new MyResource($object)], 201);
         }
     }
 
@@ -85,9 +91,9 @@ class MyController extends Controller
     {
         $object = $model::find($id);
         if ($object) {
-            return response()->json(['status_code' => 200, 'data' => new MyResource($object)]);
+            return response()->json(['status_code' => 200, 'data' => new MyResource($object)], 200);
         }
-        return response()->json(['status_code' => 401, 'message' => 'ID not found'], 401);
+        return response()->json(['status_code' => 404, 'message' => 'ID not found'], 404);
     }
 
     /**
@@ -109,14 +115,14 @@ class MyController extends Controller
                 $object->save();
             }
             if ($model == 'App\\Doctor') {
-                return response()->json(['status_code' => 201, 'data' => new DoctorResource($object)]);
+                return response()->json(['status_code' => 200, 'data' => new DoctorResource($object)], 200);
             }
             if ($model == 'App\\Employee') {
-                return response()->json(['status_code' => 201, 'data' => new EmployeeResource($object)]);
+                return response()->json(['status_code' => 200, 'data' => new EmployeeResource($object)], 200);
             }
-            return response()->json(['status_code' => 201, 'data' => new MyResource($object)]);
+            return response()->json(['status_code' => 200, 'data' => new MyResource($object)], 200);
         }
-        return response()->json(['status_code' => 202, 'message' => 'ID not found']);
+        return response()->json(['status_code' => 404, 'message' => 'ID not found'], 404);
     }
 
     /**
