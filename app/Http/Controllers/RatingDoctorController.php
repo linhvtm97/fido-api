@@ -24,7 +24,7 @@ class RatingDoctorController extends Controller
     {
         $doctor = Doctor::find($doctor_id);
         if($doctor){
-            return new RatingCollection($doctor->ratings()->get());
+            return new RatingCollection($doctor->ratings()->orderBy('id', 'desc')->get());
         }
         return response()->json(['status_code' => 401, 'message' => 'ID not found'], 401);
         
