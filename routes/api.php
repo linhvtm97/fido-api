@@ -27,6 +27,8 @@ Route::group(['middleware' => ['cors', 'api']], function () {
 
     Route::post('/logout', 'AuthController@logout');
 
+    Route::put('/reset-password', 'ResetPasswordController@reset');
+
     Route::resource('users', 'UserController')->except([
         'create', 'edit'
     ]);
