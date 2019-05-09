@@ -37,7 +37,8 @@ class MyController extends Controller
             ], 200);
         }
         return response()->json([
-            'status_code' => 204
+            'status_code' => 204,
+            'message' => 'no content'
         ], 204);
     }
 

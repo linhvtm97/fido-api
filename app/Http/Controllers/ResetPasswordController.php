@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 use App\Notifications\ResetPasswordRequest;
+use Illuminate\Support\Facades\Hash;
 
 class ResetPasswordController extends Controller
 {
@@ -17,7 +18,8 @@ class ResetPasswordController extends Controller
     {
         $user = User::where('email', $request->email)->firstOrFail();
         if ($user) {
-            if (strcmp(bcrypt($request->password), ($user->password))) {
+            if (Hash::check($request->password, $user->password))
+            {
                 $newPassword = $request->resetPassword;
                 $user->password = $newPassword;
                 $user->save();
