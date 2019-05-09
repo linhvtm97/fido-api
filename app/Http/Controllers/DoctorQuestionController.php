@@ -74,10 +74,10 @@ class DoctorQuestionController extends Controller
      */
     public function show($doctor_id, $id)
     {
-        $rating = Doctor::find($doctor_id)->ratings()->find($id);
+        $question = Doctor::find($doctor_id)->questions()->find($id);
 
-        if ($rating) {
-            return new RatingResource($rating);
+        if ($question) {
+            return new QuestionResource($question);
         }
         return response()->json(['status_code' => 401, 'message' => 'ID not found'], 401);
     }
