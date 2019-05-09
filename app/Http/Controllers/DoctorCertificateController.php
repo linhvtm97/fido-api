@@ -24,7 +24,7 @@ class DoctorCertificateController extends Controller
         if($doctor){
             return new MyCollection($doctor->certificates()->get());
         }
-        return response()->json(['status_code' => 401, 'message' => 'ID not found'], 401);
+        return response()->json(['status_code' => 404, 'message' => 'ID not found'], 404);
         
     }
 
@@ -76,7 +76,7 @@ class DoctorCertificateController extends Controller
         if ($certificate) {
             return response()->json(['status_code' => 200, 'data' => new MyResource($certificate)]);
         }
-        return response()->json(['status_code' => 401, 'message' => 'ID not found'], 401);
+        return response()->json(['status_code' => 404, 'message' => 'ID not found'], 404);
     }
 
     /**
@@ -110,7 +110,7 @@ class DoctorCertificateController extends Controller
             }
             return response()->json(['status_code' => 201, 'data' => new MyResource($certificate)]);
         }
-        return response()->json(['status_code' => 401, 'message' => 'ID not found']);
+        return response()->json(['status_code' => 404, 'message' => 'ID not found'], 404);
     }
 
     /**
@@ -126,6 +126,6 @@ class DoctorCertificateController extends Controller
             $certificate->delete();
             return response()->json(['status_code' => 204]);
         }
-        return response()->json(['status_code' => 401, 'message' => 'ID not found']);
+        return response()->json(['status_code' => 404, 'message' => 'ID not found'], 404);
     }
 }

@@ -15,6 +15,8 @@ use Validator;
 use App\Employee;
 use App\Http\Resources\EmployeeResource;
 use App\Http\Resources\QuestionResource;
+use App\Http\Resources\PatientResource;
+use App\Http\Resources\PatientCollection;
 
 class MyController extends Controller
 {
@@ -27,6 +29,9 @@ class MyController extends Controller
     {
         $results = $model::orderBy('id', 'asc')->get();
         if ($results) {
+            if ($model == 'App\\Patient') {
+                return response()->json(['status_code' => 200, 'data' => new PatientCollection($results)], 200);
+            }
             return response()->json([
                 'status_code' => 200, 'data' => new MyCollection($results)
             ], 200);
@@ -77,6 +82,10 @@ class MyController extends Controller
             if ($model == 'App\\Employee') {
                 $object->employee_no = 'NV' . $object->id;
                 $object->save();
+                return response()->json(['status_code' => 200, 'data' => new EmployeeResource($object)], 200);
+            }
+            if ($model == 'App\\Patient') {
+                return response()->json(['status_code' => 200, 'data' => new PatientResource($object)], 200);
             }
             return response()->json(['status_code' => 201, 'data' => new MyResource($object)], 201);
         }
@@ -92,8 +101,8 @@ class MyController extends Controller
     {
         $object = $model::find($id);
         if ($object) {
-            if ($model == 'App\\Question') {
-                return response()->json(['status_code' => 200, 'data' => new QuestionResource($object)], 200);
+            if ($model == 'App\\Employee') {
+                return response()->json(['status_code' => 200, 'data' => new EmployeeResource($object)], 200);
             }
             return response()->json(['status_code' => 200, 'data' => new MyResource($object)], 200);
         }
@@ -126,6 +135,9 @@ class MyController extends Controller
             }
             if ($model == 'App\\Question') {
                 return response()->json(['status_code' => 200, 'data' => new QuestionResource($object)], 200);
+            }
+            if ($model == 'App\\Patient') {
+                return response()->json(['status_code' => 200, 'data' => new PatientResource($object)], 200);
             }
             return response()->json(['status_code' => 200, 'data' => new MyResource($object)], 200);
         }
