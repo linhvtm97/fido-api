@@ -7,6 +7,8 @@ use App\Doctor;
 use App\Http\Resources\MyCollection;
 use App\Http\Resources\RatingCollection;
 use App\Rating;
+use App\Http\Resources\QuestionCollection;
+use App\Question;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,13 +51,11 @@ Route::group(['middleware' => ['cors', 'api']], function () {
         'create', 'edit'
     ]);
 
-
     Route::resource('doctors.ratings', 'RatingDoctorController')->except([
         'create', 'edit'
     ]);
 
-
-    Route::resource('questions', 'QuestionController')->except([
+    Route::resource('doctors.questions', 'DoctorQuestionController')->except([
         'create', 'edit'
     ]);
 
@@ -86,5 +86,7 @@ Route::group(['middleware' => ['cors', 'api']], function () {
         Route::post('/search', 'SearchController@searchEmployee');
     });
 
-    Route::post('/search', 'SearchController@search');
+    Route::prefix('/doctors')->group(function () {
+        Route::post('/search', 'SearchController@search');
+    });
 });

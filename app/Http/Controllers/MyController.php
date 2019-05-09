@@ -92,7 +92,7 @@ class MyController extends Controller
     {
         $object = $model::find($id);
         if ($object) {
-            if($model == 'App\\Question'){
+            if ($model == 'App\\Question') {
                 return response()->json(['status_code' => 200, 'data' => new QuestionResource($object)], 200);
             }
             return response()->json(['status_code' => 200, 'data' => new MyResource($object)], 200);
