@@ -38,9 +38,10 @@ class Doctor extends Model
         return $this->belongsTo(Employee::class, 'employee_id');
     }
     public function ratings(){
-        return $this->hasMany(Rating::class);
+        return $this->hasMany(Rating::class)->orderBy('id', 'desc');
+        
     }
     public function questions(){
-        return $this->hasMany(Question::class);
+        return $this->hasMany(Question::class)->orderBy('id', 'desc');
     }
 }
