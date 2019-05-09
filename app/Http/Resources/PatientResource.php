@@ -29,7 +29,7 @@ class PatientResource extends JsonResource
             "email" => $this->email,
             "address_id" => empty($this->address->id) ? null : $this->address->id,
             "address_name" => empty($this->address->name) ? null : $this->address->name,
-            "reviews" => new RatingCollection($this->ratings),
+            "review" => new RatingCollection($this->ratings),
             "questions" => new QuestionCollection($this->questions),
         ];
     }
