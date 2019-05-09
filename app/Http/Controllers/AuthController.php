@@ -51,9 +51,9 @@ class AuthController extends Controller
 
         if (!$token = auth()->attempt($credentials)) {
             return response()->json([
-                'status_code' => 401,
+                'status_code' => 202,
                 'message' => 'Email or password is incorrect'
-            ], 401);
+            ], 202);
         }
         $user = User::where('email', $request['email'])->first();
         return $this->respondWithToken($token, $user);
