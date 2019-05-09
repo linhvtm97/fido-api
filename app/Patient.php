@@ -32,5 +32,4 @@ class Patient extends Model
     public function questions(){
         return $this->hasMany(Question::class)->orderBy('id', 'desc');
     }
-
 }
