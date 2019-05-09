@@ -128,9 +128,9 @@ class DoctorQuestionController extends Controller
      */
     public function destroy($doctor_id, $id)
     {
-        $rating = Doctor::find($doctor_id)->ratings()->find($id);
-        if ($rating) {
-            $rating->delete();
+        $question = Doctor::find($doctor_id)->questions()->find($id);
+        if ($question) {
+            $question->delete();
             return response()->json(['status_code' => 204]);
         }
         return response()->json(['status_code' => 401, 'message' => 'ID not found']);
