@@ -14,6 +14,7 @@ use DB;
 use Validator;
 use App\Employee;
 use App\Http\Resources\EmployeeResource;
+use App\Http\Resources\QuestionResource;
 
 class MyController extends Controller
 {
@@ -91,6 +92,9 @@ class MyController extends Controller
     {
         $object = $model::find($id);
         if ($object) {
+            if($model == 'App\\Question'){
+                return response()->json(['status_code' => 200, 'data' => new QuestionResource($object)], 200);
+            }
             return response()->json(['status_code' => 200, 'data' => new MyResource($object)], 200);
         }
         return response()->json(['status_code' => 404, 'message' => 'ID not found'], 404);
@@ -119,6 +123,9 @@ class MyController extends Controller
             }
             if ($model == 'App\\Employee') {
                 return response()->json(['status_code' => 200, 'data' => new EmployeeResource($object)], 200);
+            }
+            if ($model == 'App\\Question') {
+                return response()->json(['status_code' => 200, 'data' => new QuestionResource($object)], 200);
             }
             return response()->json(['status_code' => 200, 'data' => new MyResource($object)], 200);
         }

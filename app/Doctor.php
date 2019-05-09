@@ -40,4 +40,7 @@ class Doctor extends Model
     public function ratings(){
         return $this->hasMany(Rating::class);
     }
+    public function questions(){
+        return $this->hasMany(Question::class);
+    }
 }

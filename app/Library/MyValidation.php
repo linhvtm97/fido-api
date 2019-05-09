@@ -11,10 +11,9 @@ class MyValidation
         'rePassword' => 'same:password',
     );
 
-    public static $ruleGroup = array(
-        'name' => 'required|unique:groups',
+    public static $ruleQuestion = array(
+        'question_content' => 'required',
     );
-
 
     public static $ruleDoctor = array(
         'name' => 'required',
@@ -52,8 +51,8 @@ class MyValidation
         'rePassword.same' => 'Confirm Password and Password must be the same',
     );
 
-    public static $messageGroup = array(
-        'name' => 'Name is required',
+    public static $messageQuestion = array(
+        'question_content' => 'Question content is required',
     );
 
 

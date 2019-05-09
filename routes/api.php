@@ -55,6 +55,10 @@ Route::group(['middleware' => ['cors', 'api']], function () {
     ]);
 
 
+    Route::resource('questions', 'QuestionController')->except([
+        'create', 'edit'
+    ]);
+
     Route::resource('admins', 'AdminController')->except([
         'create', 'edit'
     ]);

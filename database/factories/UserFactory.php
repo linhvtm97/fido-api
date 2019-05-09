@@ -22,6 +22,16 @@ use App\Rating;
 |
 */
 
+
+$factory->define(Question::class, function (Faker $faker) {
+    return [
+        'question_content' => 'Who are you ?',
+        'answer' => 'I do not know',
+        'patient_id' => $faker->unique()->numberBetween(1, 20),
+        'doctor_id' => $faker->unique()->numberBetween(1, 20),
+    ];
+});
+
 $factory->define(Doctor::class, function (Faker $faker) {
     static $doctor_number = 1;
     return [
