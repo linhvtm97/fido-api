@@ -82,10 +82,10 @@ class MyController extends Controller
             if ($model == 'App\\Employee') {
                 $object->employee_no = 'NV' . $object->id;
                 $object->save();
-                return response()->json(['status_code' => 200, 'data' => new EmployeeResource($object)], 200);
+                return response()->json(['status_code' => 200, 'data' => new EmployeeResource($object)], 201);
             }
             if ($model == 'App\\Patient') {
-                return response()->json(['status_code' => 200, 'data' => new PatientResource($object)], 200);
+                return response()->json(['status_code' => 200, 'data' => new PatientResource($object)], 201);
             }
             return response()->json(['status_code' => 201, 'data' => new MyResource($object)], 201);
         }
