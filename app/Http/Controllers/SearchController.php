@@ -9,6 +9,7 @@ use App\Http\Resources\DoctorCollection;
 use App\Patient;
 use App\Http\Resources\MyCollection;
 use App\Employee;
+use App\Http\Resources\PatientCollection;
 
 class SearchController extends Controller
 {
@@ -46,7 +47,7 @@ class SearchController extends Controller
            'key' => $request->key,
         );
         $patients = Patient::where('name', 'LIKE', '%'.$data['key'].'%')->orWhere('email', 'LIKE', $data['key'])->paginate(10);
-        return new MyCollection($patients);
+        return response()->json(['status_code' => 200, 'data' => new PatientCollection($patients)], 200);
     }
 
     public function searchEmployee(Request $request)
