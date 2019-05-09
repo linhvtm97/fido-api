@@ -42,7 +42,7 @@ class DoctorResource extends JsonResource
             "employee_id" =>  empty($this->employee->id) ? null : $this->employee->id,
             "employee_name" => empty($this->employee->name) ? null : $this->employee->name,
             "rating" => empty($this->rating) ? 0 : $this->rating,
-            "review" => new RatingCollection($this->ratings),
+            "reviews" => new RatingCollection($this->ratings),
             "questions" => new QuestionCollection($this->questions),
             "likes" => $this->likes,
             "numberOfRating" => count($this->ratings),
