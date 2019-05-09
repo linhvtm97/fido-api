@@ -25,8 +25,8 @@ class RatingResource extends JsonResource
             'patient_avatar' => $this->patient->avatar,
             'like' => empty($this->like) ? 0 : $this->like,
             'report' => empty($this->report) ? 0 : $this->report,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'created_at' => date_format($this->created_at, 'Y-m-d H:i:s'),
+            'updated_at' => date_format($this->updated_at, 'Y-m-d H:i:s'),
         ];
     }
 }
