@@ -3,6 +3,7 @@
 namespace App\Library;
 
 use App\Doctor;
+use Faker\Provider\ka_GE\DateTime;
 
 class MyFunctions
 {
@@ -52,5 +53,10 @@ class MyFunctions
             $doctor->likes += $like == null ? 0 : $like;
             $doctor->save();
         } else return response()->json(['status_code' => 401]);
+    }
+
+    public static function countAge($birthDate)
+    {
+        return date_diff(date_create($birthDate), date_create('now'))->y;
     }
 }

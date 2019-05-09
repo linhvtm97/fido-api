@@ -18,4 +18,9 @@ class Patient extends Model
     {
         return $this->morphMany(User::class, 'usable');
     }
+
+    public function address()
+    {
+        return $this->belongsTo('App\Address', 'address_id');
+    }
 }

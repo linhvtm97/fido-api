@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Library\MyFunctions;
 
 class QuestionResource extends JsonResource
 {
@@ -24,6 +25,8 @@ class QuestionResource extends JsonResource
             'patient_id' => $this->patient->id,
             'patient_name' => $this->patient->name,
             'patient_avatar' => $this->patient->avatar,
+            'patient_address_name' => $this->patient->address->name,
+            'patient_age' => MyFunctions::countAge($this->patient->birthday),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
