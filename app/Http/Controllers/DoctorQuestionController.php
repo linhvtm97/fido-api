@@ -61,7 +61,7 @@ class DoctorQuestionController extends Controller
         }
         $question = Question::create($data);
         if ($question) {
-            return response()->json(['status_code' => 200, 'data' => new QuestionResource($question)]);
+            return response()->json(['status_code' => 201, 'data' => new QuestionResource($question)]);
         }
         return response()->json(['status_code' => 302, 'message' => 'Can not create']);
     }
