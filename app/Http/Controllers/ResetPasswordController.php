@@ -23,9 +23,9 @@ class ResetPasswordController extends Controller
                 $newPassword = $request->resetPassword;
                 $user->password = $newPassword;
                 $user->save();
-                return response()->json(['message' => 'Success',]);
+                return response()->json(['status_code' => 200, 'message' => 'Success',], 200);
             }
         }
-        return response()->json(['message' => 'User not found'], 404);
+        return response()->json(['status_code' => 404, 'message' => 'User not found'], 404);
     }
 }
