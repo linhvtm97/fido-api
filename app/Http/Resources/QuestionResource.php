@@ -25,7 +25,7 @@ class QuestionResource extends JsonResource
             'patient_id' => $this->patient->id,
             'patient_name' => $this->patient->name,
             'patient_avatar' => $this->patient->avatar,
-            'patient_address_name' => $this->patient->address->name,
+            'patient_address_name' => empty($this->patient->address)? 'Default' : $this->patient->address->name,
             'patient_age' => MyFunctions::countAge($this->patient->birthday),
             'created_at' => date_format($this->created_at, 'Y-m-d H:i:s'),
             'updated_at' => date_format($this->updated_at, 'Y-m-d H:i:s'),

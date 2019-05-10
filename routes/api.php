@@ -90,5 +90,14 @@ Route::group(['middleware' => ['cors', 'api']], function () {
     Route::prefix('/doctors')->group(function () {
         Route::post('/search', 'SearchController@search');
     });
-    
+
+    Route::get('/ratings/all', function () {
+        return new RatingCollection(Rating::all());
+    });
+    Route::get('/certificates/all', function () {
+        return new MyResource(Certificate::all());
+    });
+    Route::get('/questions/all', function () {
+        return new MyResource(Question::all());
+    });
 });
