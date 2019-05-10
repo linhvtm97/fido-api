@@ -28,8 +28,16 @@ class Patient extends Model
         return $this->hasMany(Rating::class)->orderBy('id', 'desc');
         
     }
-    
+
     public function questions(){
         return $this->hasMany(Question::class)->orderBy('id', 'desc');
+    }
+    public function delete()
+    {
+        // delete all related object
+        $this->ratings()->delete();
+        $this->questions()->delete();
+        // delete the user
+        return parent::delete();
     }
 }

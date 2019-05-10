@@ -25,7 +25,7 @@ use App\Rating;
 
 $factory->define(Question::class, function (Faker $faker) {
     return [
-        'question_content' => 'Who are you ?',
+        'question_content' => 'I am very tired Whether I am sick or not?',
         'answer' => 'I do not know',
         'patient_id' => $faker->unique()->numberBetween(1, 20),
         'doctor_id' => $faker->unique()->numberBetween(1, 20),
@@ -48,13 +48,13 @@ $factory->define(Doctor::class, function (Faker $faker) {
         'passport_place' => $faker->address,
         'passport_date' => $faker->date($format = 'Y-m-d', $max = 'now'),
         'phone_number' => $faker->numberBetween(11111111,999999),
-        'address_id' => $faker->numberBetween(1,50),
-        'fk_employee_id' => $faker->numberBetween(1,20),
+        'address_id' => $faker->numberBetween(3,50),
+        'employee_id' => $faker->numberBetween(1,20),
         'hospital_name' => 'BV Trung Ương Huế ',
         'specialist_id' => $faker->numberBetween(2,20),
         'email' =>$faker->email,
         'sub_specialist_id' => $faker->numberBetween(2,20),
-        'actived' => 1,
+        'actived' => numberBetween(0,1),
         'rating' => 3.2,
         'description'=> $faker->text(200),
         'experience' => $faker->text(200),

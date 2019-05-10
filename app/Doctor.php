@@ -43,4 +43,13 @@ class Doctor extends Model
     public function questions(){
         return $this->hasMany(Question::class)->orderBy('id', 'desc');
     }
+    public function delete()
+    {
+        // delete all related object
+        $this->ratings()->delete();
+        $this->questions()->delete();
+        $this->certificates()->delete();
+        // delete the user
+        return parent::delete();
+    }
 }

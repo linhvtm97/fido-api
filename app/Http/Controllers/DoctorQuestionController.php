@@ -47,7 +47,12 @@ class DoctorQuestionController extends Controller
     public function store(Request $request, $doctor_id)
     {
 
-        $data = $request->all();
+        $data = array(
+            "doctor_id" => $doctor_id,
+            "patient_id" => $request->patient_id,
+            "question_content" => $request->question_content,
+            "answer" => $request->answer,
+        );
         $validator = Validator::make($request->all(), MyValidation::$ruleQuestion, MyValidation::$messageQuestion);
         if ($validator->fails()) {
             $message = $validator->messages()->getMessages();
@@ -61,6 +66,8 @@ class DoctorQuestionController extends Controller
         }
         $question = Question::create($data);
         if ($question) {
+            $question->doctor_id = $doctor_id;
+            $question->save();
             return response()->json(['status_code' => 201, 'data' => new QuestionResource($question)]);
         }
         return response()->json(['status_code' => 302, 'message' => 'Can not create']);
@@ -110,8 +117,14 @@ class DoctorQuestionController extends Controller
         }
         $question = $doctor->questions()->get()->find($id);
         if ($question) {
-            $data = $request->all();
+            $data = array(
+                "doctor_id" => $doctor_id,
+                "patient_id" => $request->patient_id,
+                "question_content" => $request->question_content,
+                "answer" => $request->answer,
+            );
             $question->update($data);
+            $question->doctor_id = $doctor_id;
             return response()->json(['status_code' => 200, 'data' => new QuestionResource($question)]);
         }
         return response()->json([

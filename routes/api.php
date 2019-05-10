@@ -9,6 +9,7 @@ use App\Http\Resources\RatingCollection;
 use App\Rating;
 use App\Http\Resources\QuestionCollection;
 use App\Question;
+use App\Certificate;
 
 /*
 |--------------------------------------------------------------------------
@@ -89,4 +90,5 @@ Route::group(['middleware' => ['cors', 'api']], function () {
     Route::prefix('/doctors')->group(function () {
         Route::post('/search', 'SearchController@search');
     });
+    
 });
