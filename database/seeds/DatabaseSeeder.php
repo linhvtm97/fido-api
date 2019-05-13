@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Certificate;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,5 +16,8 @@ class DatabaseSeeder extends Seeder
         $this->call(PatientSeeder::class);
         $this->call(EmployeeSeeder::class);
         $this->call(UserSeeder::class);
+        // $this->call(CertificateSeeder::class);
+        // $this->call(RatingSeeder::class);
+        // $this->call(QuestionSeeder::class);
     }
 }

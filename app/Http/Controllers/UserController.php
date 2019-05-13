@@ -3,16 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Resources\UserResource;
 use App\Library\MyValidation;
 use App\User;
 use App\Http\Resources\MyCollection;
 use Validator;
-use Illuminate\Support\Str;
 use App\Http\Resources\MyResource;
-use Illuminate\Support\Facades\Hash;
 
-class UserController extends Controller 
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -46,18 +43,20 @@ class UserController extends Controller
 
         if ($validator->fails()) {
             $message = $validator->messages()->getMessages();
-            return response()->json([$message], 401);    
+            return response()->json(["message" => $message, 'status_code' => 401 ], 401);
         }
         $data = $request->all();
-        array_push($data, 'api_token', Str::random(10));
         $user = User::create($data);
         $user->password = $data['password'];
+
+        $model_name = $user->usable_type;
+        $role = $model_name::create($data);
+        $user->usable_id = $role->id;
         $user->save();
-        
-        if($user){
-            return new UserResource($user);
+
+        if ($user) {
+            return new MyResource($user);
         }
-               
     }
 
     /**
@@ -68,13 +67,8 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
-        $role = $user->usable;
-        if ($role) {
-            return new MyResource($role);
-        }
-        return response()->json(['error' => 'ID not found']);   
-      }
+        return MyController::show('App\\User', $id);
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -96,13 +90,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::find($id);
-        if ($user) {
-            $userUpdated = $request->all();
-            $user->update($userUpdated);
-            return new UserResource($user);
-        }
-        return response()->json(['error' => 'ID not found']);   
+        return MyController::update($request, $id, 'App\\User');
     }
 
     /**
@@ -113,11 +101,6 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::find($id);
-        if ($user) {
-            $user->delete();
-            return response()->json(['message' => 'Deleted']);   
-        }
-        return response()->json(['error' => 'ID not found']);   
+        return MyController::destroy($id, 'App\\User');
     }
 }

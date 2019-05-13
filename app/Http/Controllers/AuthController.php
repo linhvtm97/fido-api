@@ -6,10 +6,7 @@ use Validator;
 use Illuminate\Http\Request;
 use App\Library\MyValidation;
 use App\User;
-use Illuminate\Support\Str;
 use App\Http\Resources\MyResource;
-use Illuminate\Support\Facades\Hash;
-use Tymon\JWTAuth\Facades\JWTAuth as TymonJWTAuth;
 
 class AuthController extends Controller
 {
@@ -19,16 +16,24 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             $message = $validator->messages()->getMessages();
-            return response()->json($message, 401);
+            return response()->json(['message'=>$message, 'status_code' => 202], 202);
         }
-
         $data = $request->all();
-        $data['password'] = bcrypt($data['password']);
-        array_push($data, Str::random(10), 'api_token');
         $user = User::create($data);
+        $user->password = $data['password'];
+
+        $model_name = $user->usable_type;
+        $role = $model_name::create($data);
+        $user->usable_id = $role->id;
+        if ($model_name == 'App\\Doctor') {
+            $role->actived = 0;
+            $role->doctor_no = 'BS' . $role->id;
+            $role->email = $user->email;
+            $role->save();
+        }
+        $user->save();
 
         $token = auth()->login($user);
-
         return $this->respondWithToken($token, $user);
     }
 
@@ -43,30 +48,37 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = request(['email', 'password']);
-        
-        if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+
+        if (!$token = auth()->attempt($credentials)) {
+            return response()->json([
+                'status_code' => 202,
+                'message' => 'Email or password is incorrect'
+            ], 202);
         }
         $user = User::where('email', $request['email'])->first();
         return $this->respondWithToken($token, $user);
-      
     }
 
     public function logout()
     {
-        auth()->logout();
-
-        return response()->json(['message' => 'Successfully logged out']);
+        try {
+            auth()->logout();
+            return response()->json(['status_code' => 200]);
+        } catch (\Exception $ex) {
+            return response()->json(['message' => 'Token has been expired'], 404);
+        }
     }
 
     protected function respondWithToken($token, $user)
     {
         return response()->json([
+            'status_code' => 200,
             'access_token' => $token,
             'token_type'   => 'bearer',
             'expires_in'   => auth()->factory()->getTTL() * 60,
             'data' => AuthController::responseWithUser($user),
-            'group_id' => $user->group_id,
-        ]);
+            'usable_type' => $user->usable_type,
+            'usable_id' => $user->usable_id,
+        ], 200);
     }
 }

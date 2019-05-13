@@ -1,5 +1,15 @@
 <?php
-
+use App\Specialist;
+use App\Address;
+use App\Http\Resources\MyResource;
+use App\Http\Resources\DoctorCollection;
+use App\Doctor;
+use App\Http\Resources\MyCollection;
+use App\Http\Resources\RatingCollection;
+use App\Rating;
+use App\Http\Resources\QuestionCollection;
+use App\Question;
+use App\Certificate;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,70 +30,74 @@ Route::group(['middleware' => ['cors', 'api']], function () {
 
     Route::post('/logout', 'AuthController@logout');
 
-    Route::prefix('groups')->group(function () {
+    Route::put('/reset-password', 'ResetPasswordController@reset');
 
-        Route::get('/', 'GroupController@index');
+    Route::resource('users', 'UserController')->except([
+        'create', 'edit'
+    ]);
 
-        Route::get('/{id}', 'GroupController@show');
+    Route::resource('doctors', 'DoctorController')->except([
+        'create', 'edit'
+    ]);
 
-        Route::post('/', 'GroupController@store');
+    Route::resource('patients', 'PatientController')->except([
+        'create', 'edit'
+    ]);
 
-        Route::put('/{id}', 'GroupController@update');
+    Route::resource('employees', 'EmployeeController')->except([
+        'create', 'edit'
+    ]);
 
-        Route::delete('/{id}', 'GroupController@destroy');
+    Route::resource('doctors.certificates', 'DoctorCertificateController')->except([
+        'create', 'edit'
+    ]);
+
+    Route::resource('doctors.ratings', 'RatingDoctorController')->except([
+        'create', 'edit'
+    ]);
+
+    Route::resource('doctors.questions', 'DoctorQuestionController')->except([
+        'create', 'edit'
+    ]);
+
+    Route::resource('admins', 'AdminController')->except([
+        'create', 'edit'
+    ]);
+
+    Route::get('addresses', function () {
+        return new MyResource(Address::all());
     });
 
-    Route::prefix('users')->group(function () {
-
-        Route::get('/', 'UserController@index');
-
-        Route::get('/{id}', 'UserController@show');
-
-        Route::post('/', 'UserController@store');
-
-        Route::put('/{id}', 'UserController@update');
-
-        Route::delete('/{id}', 'UserController@destroy');
+    Route::get('specialists', function () {
+        return new MyResource(Specialist::all());
     });
 
-    Route::prefix('doctors')->group(function () {
-
-        Route::get('/', 'DoctorController@index');
-
-        Route::get('/{id}', 'DoctorController@show');
-
-        Route::post('/', 'DoctorController@store');
-
-        Route::put('/{id}', 'DoctorController@update');
-
-        Route::delete('/{id}', 'DoctorController@destroy');
+    Route::get('doctors-pagination', function () {
+        return new DoctorCollection(Doctor::with('address', 'specialist', 'sub_specialist', 'employee', 'ratings')->where('actived', '=', 1)->orderBy('id', 'asc')->paginate(10));
     });
 
-    Route::prefix('patients')->group(function () {
-
-        Route::get('/', 'PatientController@index');
-
-        Route::get('/{id}', 'PatientController@show');
-
-        Route::post('/', 'PatientController@store');
-
-        Route::put('/{id}', 'PatientController@update');
-
-        Route::delete('/{id}', 'PatientController@destroy');
+    Route::prefix('/patients')->group(function () {
+        Route::post('/search', 'SearchController@searchPatient');
     });
 
-
-    Route::prefix('employees')->group(function () {
-
-        Route::get('/', 'EmployeeController@index');
-
-        Route::get('/{id}', 'EmployeeController@show');
-
-        Route::post('/', 'EmployeeController@store');
-
-        Route::put('/{id}', 'EmployeeController@update');
-
-        Route::delete('/{id}', 'EmployeeController@destroy');
+    Route::get('/ratings/reported', function () {
+        return new RatingCollection(Rating::where('report', '=', 1)->orderBy('id', 'asc')->get());
     });
-    
+    Route::prefix('/employees')->group(function () {
+        Route::post('/search', 'SearchController@searchEmployee');
+    });
+
+    Route::prefix('/doctors')->group(function () {
+        Route::post('/search', 'SearchController@search');
+    });
+
+    Route::get('/ratings/all', function () {
+        return new RatingCollection(Rating::all());
+    });
+    Route::get('/certificates/all', function () {
+        return new MyResource(Certificate::all());
+    });
+    Route::get('/questions/all', function () {
+        return new MyResource(Question::all());
+    });
 });

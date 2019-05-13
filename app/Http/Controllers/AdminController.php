@@ -3,18 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Group;
-use App\Http\Resources\GroupResource;
 use App\Http\Resources\MyCollection;
-use App\Library\MyResponse;
-use Validator;
-use App\Library\MyValidation;
+use App\Admin;
+use DB;
 
-// define('ERROR', 1);
-// define('SUCCESS', 0);
-
-
-class GroupController extends Controller
+class AdminController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,7 +16,7 @@ class GroupController extends Controller
      */
     public function index()
     {
-        return new MyCollection(Group::all());
+        return new MyCollection(Admin::all());
     }
 
     /**
@@ -44,16 +37,7 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), MyValidation::$ruleGroup, MyValidation::$messageGroup);
-
-        if ($validator->fails()) {
-            $message = $validator->messages()->getMessages();
-            return response()->json([$message], 401);    
-        }
-        $group = Group::create($request->all());
-        if($group){
-            return new GroupResource($group);
-        }
+        //
     }
 
     /**
@@ -64,12 +48,7 @@ class GroupController extends Controller
      */
     public function show($id)
     {
-        $group = Group::find($id);
-        if ($group) {
-            return new GroupResource($group);
-        }
-
-        return response()->json(['error' => 'ID not found']);   
+        //
     }
 
     /**
@@ -92,14 +71,7 @@ class GroupController extends Controller
      */
     public function update(Request $request, $id)
     {
-
-        $group = Group::find($id);
-        if ($group) {
-            $groupUpdated = $request->all();
-            $group->update($groupUpdated);
-            return new GroupResource($group);
-        }
-        return response()->json(['error' => 'ID not found']);   
+        //
     }
 
     /**
@@ -110,11 +82,6 @@ class GroupController extends Controller
      */
     public function destroy($id)
     {
-        $group = Group::find($id);
-        if ($group) {
-            $group->delete();
-            return response()->json(['message' => 'Deleted']);   
-        }
-        return response()->json(['error' => 'ID not found']);   
+        //
     }
 }
