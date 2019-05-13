@@ -14,9 +14,9 @@ class AddTitleToDoctorsTable extends Migration
     public function up()
     {
         Schema::table('doctors', function (Blueprint $table) {
-            // $table->string('title')->default('doctor');
-            // $table->string('experience')->nullable();
-            // $table->string('description')->nullable();
+            $table->string('title')->default('doctor');
+            $table->string('experience')->nullable();
+            $table->string('description')->nullable();
         });
     }
 

@@ -14,7 +14,7 @@ class EditQuestion extends Migration
     public function up()
     {
         Schema::table('questions', function (Blueprint $table) {
-            // $table->integer('role')->default(0);
+            $table->integer('role')->default(0);
         });
     }
 
