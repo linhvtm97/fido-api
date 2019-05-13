@@ -15,6 +15,7 @@ class AddGroupFkToUsers extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             // $table->integer('group_id')->unsigned();
+            $table->foreign('group_id')->references('id')->on('groups');
         });
     }
 
@@ -26,7 +27,6 @@ class AddGroupFkToUsers extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->foreign('group_id')->references('id')->on('groups');
         });
     }
 }
