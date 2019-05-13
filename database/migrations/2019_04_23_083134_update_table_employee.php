@@ -14,7 +14,7 @@ class UpdateTableEmployee extends Migration
     public function up()
     {
         Schema::table('employees', function (Blueprint $table) {
-            $table->integer('phone_number')->nullable()->change();
+            $table->integer('phone_number')->nullable();
         });
     }
 

@@ -13,10 +13,10 @@ class CreateConsultingsTable extends Migration
      */
     public function up()
     {
-        Schema::table('questions', function (Blueprint $table) {
+        Schema::create('consultings', function (Blueprint $table) {
             // $table->bigIncrements('id');
             // $table->string('question_content');
-            $table->string('answer')->nullable()->change();
+            $table->string('answer')->nullable();
             // $table->integer('doctor_id');
             // $table->integer('patient_id');
             // $table->timestamps();

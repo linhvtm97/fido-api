@@ -30,7 +30,7 @@ class CreateEmployeesTable extends Migration
             $table->string('passport_no');
             $table->string('passport_place');
             $table->date('passport_date');
-            $table->integer('phone_no_1');
+            $table->integer('phone_no_1')->nullable();
             $table->integer('phone_no_2')->nullable();
             $table->string('email');
             $table->integer('fk_address_id');

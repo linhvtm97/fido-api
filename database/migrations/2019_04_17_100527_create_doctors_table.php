@@ -36,8 +36,9 @@ class CreateDoctorsTable extends Migration
             $table->integer('fk_address_id');
             $table->integer('fk_employee_id');
             $table->string('specialist');
+            $table->integer('actived')->default(1);
             $table->string('hospital_name');
-
+            $table->string('experience');
             $table->timestamps();
         });
     }
