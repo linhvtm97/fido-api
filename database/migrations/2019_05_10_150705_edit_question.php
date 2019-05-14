@@ -13,7 +13,7 @@ class EditQuestion extends Migration
      */
     public function up()
     {
-        Schema::table('questions', function (Blueprint $table) {
+        Schema::create('questions', function (Blueprint $table) {
             $table->integer('role')->default(0);
         });
     }
@@ -25,6 +25,6 @@ class EditQuestion extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('questions');
     }
 }
