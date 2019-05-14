@@ -20,8 +20,8 @@ class CreateAddressesTable extends Migration
             $table->timestamps();
         });
         Schema::table('doctors', function (Blueprint $table) {
-          $table->integer('actived')->default(1);
-          $table->string('experience')->nullable();
+          $table->integer('actived')->default(1)->change();
+          $table->string('experience')->nullable()->change();
         
         });
         Schema::table('employees', function (Blueprint $table) {

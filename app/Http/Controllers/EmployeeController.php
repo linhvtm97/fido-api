@@ -18,7 +18,7 @@ class EmployeeController extends Controller
     public function index()
     {
         $results = Employee::with('address')->orderBy('id', 'asc')->get();
-        if (!$result->isEmpty()) {
+        if (!$results->isEmpty()) {
             return response()->json([
                 'status_code' => 200, 'data' => new EmployeeCollection($results)
             ], 200);

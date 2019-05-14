@@ -29,7 +29,7 @@ class SetNullableDoctorsTable extends Migration
             $table->string('email')->nullable()->change();
             $table->integer('fk_address_id')->nullable()->change();
             $table->integer('fk_employee_id')->nullable()->change();
-            $table->string('specialist')->nullable()->change();
+            $table->integer('specialist')->nullable()->change();
             $table->string('hospital_name')->nullable()->change();
         });
       
