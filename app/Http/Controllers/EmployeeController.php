@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Library\MyValidation;
-use App\Http\Resources\MyCollection;
-use App\Employee;
-use App\Http\Resources\EmployeeCollection;
+use App\Services\EmployeeService;
 
 class EmployeeController extends Controller
 {
+    protected $employeeService;
+
+    function __construct()
+    {
+        $this->employeeService = new EmployeeService();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -17,15 +21,7 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $results = Employee::with('address')->orderBy('id', 'asc')->get();
-        if (!$result->isEmpty()) {
-            return response()->json([
-                'status_code' => 200, 'data' => new EmployeeCollection($results)
-            ], 200);
-        }
-        return response()->json([
-            'status_code' => 204, 'message' => 'No content'
-        ], 204);
+        return $this->employeeService->all();
     }
 
     /**
@@ -35,7 +31,7 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        //
+       
     }
 
     /**
@@ -46,7 +42,7 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        return MyController::store($request, 'App\\Employee', MyValidation::$ruleEmployee, MyValidation::$messageEmployee);
+        return $this->employeeService->create($request->all());
     }
 
     /**
@@ -57,7 +53,7 @@ class EmployeeController extends Controller
      */
     public function show($id)
     {
-        return MyController::show('App\\Employee', $id);
+        return $this->employeeService->find($id);
     }
 
     /**
@@ -80,7 +76,7 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return MyController::update($request, $id, 'App\\Employee');
+        return $this->employeeService->update($request->all(), $id);
     }
 
     /**
@@ -91,6 +87,6 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
-        return MyController::destroy($id, 'App\\Employee');
+        return $this->employeeService->delete($id);
     }
 }

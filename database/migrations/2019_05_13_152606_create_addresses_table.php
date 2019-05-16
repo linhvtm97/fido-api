@@ -19,15 +19,6 @@ class CreateAddressesTable extends Migration
             $table->string('code');
             $table->timestamps();
         });
-        Schema::table('doctors', function (Blueprint $table) {
-          $table->integer('actived')->default(1);
-          $table->string('experience')->nullable();
-        
-        });
-        Schema::table('employees', function (Blueprint $table) {
-            $table->dropColumn('phone_no_1');
-        });
-        
     }
 
     /**
