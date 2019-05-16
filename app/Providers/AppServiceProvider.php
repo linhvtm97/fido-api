@@ -14,8 +14,12 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(
-            'App\Repositories\Interfaces\EmployeeRepositoryInterface',
-            'App\Repositories\Eloquents\EmployeeRepository'
+            'App\Repositories\Interfaces\RepositoryInterface',
+            'App\Repositories\Eloquent\EmployeeRepository'
+        );
+        $this->app->bind(
+            'App\Services\Interfaces\EmployeeServiceInterface',
+            'App\Services\Eloquent\EmployeeService'
         );
     }
 

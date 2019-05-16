@@ -1,16 +1,21 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Eloquent;
 
-use App\Repositories\Eloquent\EmployeeRepository;
+use App\Repositories\Interfaces\RepositoryInterface;
+use App\Services\Interfaces\EmployeeServiceInterface;
 
 class EmployeeService implements EmployeeServiceInterface
 {
     protected $employeeRepository;
-
-    function __construct()
+    /**
+     * EmployeeService constructor.
+     *
+     * @param RepositoryInterface $repositoryInterface
+     */
+    function __construct(RepositoryInterface $repositoryInterface)
     {
-        $this->employeeRepository = new EmployeeRepository();
+        $this->employeeRepository = $repositoryInterface;
     }
 
     public function all()
@@ -55,7 +60,7 @@ class EmployeeService implements EmployeeServiceInterface
     public function delete($id)
     {
         try {
-            $isDeleted = $this->employeeRepository->delete($id);
+            $this->employeeRepository->delete($id);
         } catch (\Exception $th) {
             return response()->json(['Message' => $th->getMessage()], 404);
         }

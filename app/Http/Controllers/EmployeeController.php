@@ -3,16 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\EmployeeService;
+use App\Services\Interfaces\EmployeeServiceInterface;
 
 class EmployeeController extends Controller
 {
     protected $employeeService;
 
-    function __construct()
+    /**
+     * EmployeeController constructor.
+     *
+     * @param EmployeeServiceInterface $employeeService
+     */
+    public function __construct(EmployeeServiceInterface $employeeService)
     {
-        $this->employeeService = new EmployeeService();
+        $this->employeeService = $employeeService;
     }
+
 
     /**
      * Display a listing of the resource.

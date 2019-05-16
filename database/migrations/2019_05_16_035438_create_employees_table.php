@@ -22,7 +22,7 @@ class CreateEmployeesTable extends Migration
             $table->string('email')->unique();
             $table->string('avatar')->nullable();
             $table->string('gender')->nullable();
-            $table->string('employee_no')->unique();
+            $table->string('employee_no')->unique()->nullable();
             $table->string('description')->nullable();
             $table->date('birthday')->nullable();
             $table->string('id_number')->unique()->nullable();

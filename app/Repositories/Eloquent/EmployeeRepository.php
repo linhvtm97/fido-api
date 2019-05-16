@@ -2,13 +2,13 @@
 
 namespace App\Repositories\Eloquent;
 
-use App\Repositories\RepositoryInterface;
+use App\Repositories\Interfaces\RepositoryInterface;
 use App\Models\Employee;
-use App\Library\MyValidation;
 use App\Http\Resources\EmployeeCollection;
 use App\User;
 use Validator;
 use App\Library\MyFunctions;
+use App\Http\Resources\EmployeeResource;
 
 class EmployeeRepository implements RepositoryInterface
 {
@@ -16,9 +16,9 @@ class EmployeeRepository implements RepositoryInterface
     protected $model;
 
     // Constructor to bind model to repo
-    public function __construct()
-    {   
-        $this->model = new Employee();
+    public function __construct(Employee $employee)
+    {
+        $this->model = $employee;
     }
 
     // Get the associated model
@@ -49,15 +49,11 @@ class EmployeeRepository implements RepositoryInterface
     // create a new record in the database
     public function create(array $data)
     {
-        if (User::where('email', $data['email'])->first()) {
-            throw new \Exception('Email has been already taken!');
-        }
-        $validator = Validator::make($data, MyValidation::$ruleEmployee, MyValidation::$messageEmployee);
+        $validator = Validator::make($data, Employee::$ruleEmployee, Employee::$messageEmployee);
         if ($validator->fails()) {
             $message = $validator->messages()->getMessages();
             throw new \Exception(json_encode($message));
         }
-       
         $employee = $this->model->create($data);
         if ($employee) {
             User::create([
@@ -68,13 +64,14 @@ class EmployeeRepository implements RepositoryInterface
                 'usable_type' => 'App\\Employee',
                 'password' => 'default123'
             ]);
-            if ($avatar = $data['avatar']) {
-                $imageURL = MyFunctions::upload_img($avatar);
+            if (array_key_exists('avatar', $data)) {
+                $imageURL = MyFunctions::upload_img($data['avatar']);
                 $employee->avatar = $imageURL;
-                $employee->save();
             }
+            $employee->employee_no = 'NV' . $employee->id;
+            $employee->save();
         }
-        return $employee;
+        return new EmployeeResource($employee);
     }
 
     // update record in the database
@@ -99,14 +96,9 @@ class EmployeeRepository implements RepositoryInterface
         $user = User::where([
             ['usable_id', '=', $id],
             ['usable_type', '=', 'App\\Employee']
-        ])->first();
-        if ($employee == null || $user == null) {
-            throw new \Exception('ID not found');
-        } else {
-            $employee->delete();
-            $user->delete();
-            return true;
-        }
+        ])->firstOrFail();
+        $employee->delete();
+        $user->delete();
     }
 
     // show the record with the given id
@@ -116,12 +108,13 @@ class EmployeeRepository implements RepositoryInterface
     }
 
     // Find in model instance with val
-    public function findBy($field, $value){
+    public function findBy($field, $value)
+    {
         return $this->model->where($field, '=', $value)->get();
     }
 
     // Eager load database relationships
-    public function with($relations)
+    public function with(array $relations)
     {
         return $this->model->with($relations);
     }
