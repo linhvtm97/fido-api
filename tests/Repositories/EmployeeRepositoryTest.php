@@ -1,66 +1,47 @@
 <?php
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
-use App\Services\Eloquent\EmployeeService;
 use Illuminate\Support\Carbon;
 use App\Repositories\Eloquent\EmployeeRepository;
 
-class EmployeeServiceTest extends TestCase
+class EmployeeRepositoryTest extends TestCase
 {
     use DatabaseTransactions;
-    private $employeeRepository;
-
-    private $employeeService;
 
     protected $faker;
-
-    private $mock;
+    protected $employeeRepository;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->mock = App::make(EmployeeRepository::class);
-        $this->employeeService = App::make(EmployeeService::class);
-        $this->employeeRepository = $this->mock(EmployeeRepository::class);
+        $this->employeeRepository = App::make(EmployeeRepository::class);
         $this->faker = Faker\Factory::create();
         $this->initData();
     }
 
-    public function mock($class)
-    {
-        $mock = \Mockery::mock($class);
-        $this->app->instance($class, $mock);
-        return $mock;
-    }
-
     public function tearDown(): void
     {
-        Mockery::close();
         parent::tearDown();
     }
 
     public function initData()
     { }
 
-    public function testServiceIndexSuccess()
+    public function testRepositoryIndexSuccess()
     {
         $employees = factory(\App\Models\Employee::class, 10)->create();
-        $this->employeeRepository->shouldReceive('all')->andReturn($employees);
-        $results = $this->employeeService->all();
+        $results = $this->employeeRepository->all();
         $this->assertEquals($employees->count(), $results->count());
     }
 
-    public function testServiceListEmployeesIsEmpty()
+    public function testRepositoryListEmployeesIsEmpty()
     {
-        $employees = array();
-        $this->employeeRepository->shouldReceive('all')->andReturn($employees);
-        $results = $this->employeeService->all();
+        $results = $this->employeeRepository->all();
         $this->assertEquals(0, $results->count());
     }
 
-    public function testServiceCreateEmployeeSuccess()
+    public function testRepositoryCreateEmployeeSuccess()
     {
         $data = [
             'name' =>  $this->faker->name,
@@ -81,12 +62,10 @@ class EmployeeServiceTest extends TestCase
             'tax_number' => 'DN:' . $this->faker->text($max = 100),
             'active_check' => 1,
         ];
-        $employee = factory(\App\Models\Employee::class)->make($data);
-        $this->employeeRepository->shouldReceive('create')->with($data)->andReturn(true);
-        $results = $this->employeeService->create($data);
+        $results = $this->employeeRepository->create($data);
         $this->assertTrue($results);
     }
-    public function testServiceCreateEmployeeFailWithNullRequired()
+    public function testRepositoryCreateEmployeeFailWithNullRequired()
     {
         $data = [
             'name' =>  $this->faker->name,
@@ -107,11 +86,10 @@ class EmployeeServiceTest extends TestCase
 
         $this->expectException("Exception");
         $this->expectExceptionCode(204);
-        $this->employeeRepository->shouldReceive('create')->with($data)->andThrow(new \Exception, 204)->andReturn(false);        
-        $results = $this->employeeService->create($data);
+        $results = $this->employeeRepository->create($data);
     }
 
-    public function testServiceUpdateEmployeeSuccess()
+    public function testRepositoryUpdateEmployeeSuccess()
     {
         $data = [
             'name' =>  $this->faker->name,
@@ -119,11 +97,10 @@ class EmployeeServiceTest extends TestCase
         $employee = factory(\App\Models\Employee::class)->create();
         $employee->name = $data['name'];
         $employee->save();
-        $this->employeeRepository->shouldReceive('update')->with($data, $employee->id)->andReturn(true);
-        $results = $this->employeeService->update($data, $employee->id);
+        $results = $this->employeeRepository->update($data, $employee->id);
         $this->assertTrue($results);
     }
-    public function testServiceDeleteEmployeeSuccess()
+    public function testRepositoryDeleteEmployeeSuccess()
     {
         $employee = factory(\App\Models\Employee::class)->create();
         $user = factory(App\User::class)->create([
@@ -134,8 +111,7 @@ class EmployeeServiceTest extends TestCase
             'usable_id' => $employee->id,
             'usable_type' => 'App\Employee',
         ]);
-        $this->employeeRepository->shouldReceive('delete')->with($employee->id)->andReturn(true);
-        $results = $this->employeeService->delete($employee->id);
+        $results = $this->employeeRepository->delete($employee->id);
         $this->assertTrue($results);
     }
 }

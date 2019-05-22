@@ -20,11 +20,7 @@ class EmployeeService implements EmployeeServiceInterface
 
     public function all()
     {
-        $employees = $this->employeeRepository->all();
-        if (!$employees) {
-            return response()->json(['Message' => 'No content'], 204);
-        }
-        return response()->json(['Message' => 'Success', 'Data' => $employees], 200);
+        return $this->employeeRepository->all();
     }
 
 
@@ -39,42 +35,22 @@ class EmployeeService implements EmployeeServiceInterface
 
     public function create(array $data)
     {
-        try {
-            $this->employeeRepository->create($data);
-        } catch (\Exception $th) {
-            return response()->json(['Message' => $th->getMessage()], 202);
-        }
-        return response()->json(['Message' => 'Created'], 201);
+        return $this->employeeRepository->create($data);
     }
 
     public function update(array $data, $id)
     {
-        try {
-            $this->employeeRepository->update($data, $id);
-        } catch (\Exception $th) {
-            return response()->json(['Message' => $th->getMessage()], 404);
-        }
-        return response()->json(['Message' => 'Updated'], 200);
+        return $this->employeeRepository->update($data, $id);
     }
 
     public function delete($id)
     {
-        try {
-            $this->employeeRepository->delete($id);
-        } catch (\Exception $th) {
-            return response()->json(['Message' => $th->getMessage()], 404);
-        }
-        return response()->json(['Message' => 'Deleted'], 202);
+        return $this->employeeRepository->delete($id);
     }
 
     public function find($id)
     {
-        try {
-            $employee = $this->employeeRepository->show($id);
-        } catch (\Throwable $th) {
-            return response()->json(['Message' => $th->getMessage()], 404);
-        }
-        return response()->json(['Message' => 'Success', 'Data' => $employee], 200);
+        return $this->employeeRepository->show($id);
     }
 
     public function findBy($field, $value)

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\Interfaces\EmployeeServiceInterface;
+use \Exception;
 
 class EmployeeController extends Controller
 {
@@ -27,7 +28,11 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        return $this->employeeService->all();
+        $employees = $this->employeeService->all();
+        if (!$employees) {
+            return response()->json(['Message' => 'No content'], 204);
+        }
+        return response()->json(['Message' => 'Success', 'Data' => $employees], 200);
     }
 
     /**
@@ -36,9 +41,7 @@ class EmployeeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-       
-    }
+    { }
 
     /**
      * Store a newly created resource in storage.
@@ -48,7 +51,12 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        return $this->employeeService->create($request->all());
+        try {
+            $this->employeeService->create($request->all());
+        } catch (\Exception $th) {
+            return response()->json(['Message' => $th->getMessage()], 202);
+        }
+        return response()->json(['Message' => 'Created'], 201);
     }
 
     /**
@@ -59,7 +67,12 @@ class EmployeeController extends Controller
      */
     public function show($id)
     {
-        return $this->employeeService->find($id);
+        try {
+            $employee = $this->employeeService->find($id);
+        } catch (\Exception $th) {
+            return response()->json(['Message' => $th->getMessage()], 404);
+        }
+        return response()->json(['Message' => 'Success', 'Data' => $employee], 200);
     }
 
     /**
@@ -82,7 +95,12 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return $this->employeeService->update($request->all(), $id);
+        try {
+            $this->employeeService->update($request->all(), $id);
+        } catch (\Exception $th) {
+            return response()->json(['Message' => $th->getMessage()], 404);
+        }
+        return response()->json(['Message' => 'Updated'], 200);
     }
 
     /**
@@ -93,6 +111,11 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
-        return $this->employeeService->delete($id);
+        try {
+            $this->employeeService->delete($id);
+        } catch (\Exception $th) {
+            return response()->json(['Message' => $th->getMessage()], 404);
+        }
+        return response()->json(['Message' => 'Deleted'], 202);
     }
 }

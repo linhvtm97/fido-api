@@ -9,6 +9,7 @@ use App\User;
 use Validator;
 use App\Library\MyFunctions;
 use App\Http\Resources\EmployeeResource;
+use \Exception;
 
 class EmployeeRepository implements RepositoryInterface
 {
@@ -52,9 +53,10 @@ class EmployeeRepository implements RepositoryInterface
         $validator = Validator::make($data, Employee::$ruleEmployee, Employee::$messageEmployee);
         if ($validator->fails()) {
             $message = $validator->messages()->getMessages();
-            throw new \Exception(json_encode($message));
+            throw new \Exception(json_encode($message), 204);
         }
         $employee = $this->model->create($data);
+
         if ($employee) {
             User::create([
                 'user_status' => 'actived',
@@ -71,7 +73,8 @@ class EmployeeRepository implements RepositoryInterface
             $employee->employee_no = 'NV' . $employee->id;
             $employee->save();
         }
-        return new EmployeeResource($employee);
+
+        return true;
     }
 
     // update record in the database
@@ -80,13 +83,13 @@ class EmployeeRepository implements RepositoryInterface
         $employee = $this->model->findOrFail($id);
         if ($employee) {
             $employee->update($data);
-            if ($avatar = $data['avatar']) {
-                $imageURL = MyFunctions::upload_img($avatar);
+            if (array_key_exists('avatar', $data)) {
+                $imageURL = MyFunctions::upload_img($data['avatar']);
                 $employee->avatar = $imageURL;
                 $employee->save();
             }
         }
-        return $employee;
+        return true;
     }
 
     // remove record from the database
@@ -99,6 +102,7 @@ class EmployeeRepository implements RepositoryInterface
         ])->firstOrFail();
         $employee->delete();
         $user->delete();
+        return true;
     }
 
     // show the record with the given id
