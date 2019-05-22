@@ -5,13 +5,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 use App\Services\Eloquent\EmployeeService;
 use Illuminate\Support\Carbon;
+use App\Repositories\Eloquent\EmployeeRepository;
 
-class EmployeeControllerTest extends TestCase
+class EmployeeServiceTest extends TestCase
 {
     use DatabaseTransactions;
-    private $employeeService;
+    private $employeeRepository;
 
-    private $urlApi = '/api/v1/employees/';
+    private $employeeService;
 
     protected $faker;
 
@@ -20,8 +21,10 @@ class EmployeeControllerTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->mock = App::make(EmployeeService::class);
-        $this->employeeService = $this->mock(EmployeeService::class);
+        $this->mock = App::make(EmployeeRepository::class);
+        $this->employeeService = App::make(EmployeeService::class);
+        // $this->employeeService = $this->mock(EmployeeService::class);
+        $this->employeeRepository = $this->mock(EmployeeRepository::class);
         $this->faker = Faker\Factory::create();
         $this->initData();
     }
@@ -47,17 +50,19 @@ class EmployeeControllerTest extends TestCase
     public function testIndexSuccess()
     {
         $employees = factory(\App\Models\Employee::class, 10)->make();
-        $this->employeeService->shouldReceive('all')->andReturn($employees);
-        $response = $this->call('GET', $this->urlApi);
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $this->employeeRepository->shouldReceive('all')->andReturn($employees);
+        $results = $this->employeeService->all();
+        dd($results);
+        // $this->assertEquals($employees, $results);
+        // $this->assertCount($employees->count(), $results->count());
     }
 
     public function testListEmployeesIsEmpty()
     {
         $employees = array();
-        $this->employeeService->shouldReceive('all')->andReturn($employees);
-        $response = $this->call('GET', $this->urlApi);
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $expected = $this->employeeRepository->shouldReceive('all')->andReturn($employees);
+        $results = $this->employeeService->all();
+        // $this->assertEquals($expected, $results);
     }
 
     public function testCreateEmployeeSuccess()
@@ -81,9 +86,9 @@ class EmployeeControllerTest extends TestCase
             'tax_number' => 'DN:' . $this->faker->text($max = 100),
             'active_check' => 1,
         ];
-        $this->employeeService->shouldReceive('create')->once()->with($data)->andReturn(201);
-        $response = $this->call('POST', $this->urlApi, $data);
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $expected = $this->employeeRepository->shouldReceive('create')->once()->with($data)->andReturn(201);
+        $results = $this->employeeService->create($data);
+        // $this->assertEquals($expected, $results);
     }
     public function testCreateEmployeeFailWithNullRequired()
     {
@@ -106,9 +111,9 @@ class EmployeeControllerTest extends TestCase
             'tax_number' => 'DN:' . $this->faker->text($max = 100),
             'active_check' => 1,
         ];
-        $this->employeeService->shouldReceive('create')->once()->with($data)->andReturn(202);
-        $response = $this->call('POST', $this->urlApi, $data);
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $expected = $this->employeeRepository->shouldReceive('create')->once()->with($data)->andReturn(202);
+        $results = $this->employeeService->create($data);
+        // $this->assertEquals($expected, $results);
     }
 
     public function testUpdateEmployeeSuccess()
@@ -133,16 +138,15 @@ class EmployeeControllerTest extends TestCase
             'active_check' => 1,
         ];
         $employee = factory(\App\Models\Employee::class)->create();
-        $this->employeeService->shouldReceive('update')->once()->with($data, $employee->id)->andReturn(200);
-        $response = $this->call('PUT', $this->urlApi.$employee->id, $data);
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-    
+        $expected = $this->employeeRepository->shouldReceive('update')->once()->with($data, $employee->id)->andReturn(200);
+        $results = $this->employeeService->update($data, $employee->id);
+        // $this->assertEquals($expected, $results);
     }
     public function testDeleteEmployeeSuccess()
     {
         $employee = factory(\App\Models\Employee::class)->create();
-        $this->employeeService->shouldReceive('delete')->once()->andReturn(200);
-        $response = $this->call('DELETE', $this->urlApi . $employee->id);
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $expected = $this->employeeRepository->shouldReceive('delete')->once()->with($employee->id)->andReturn(200);
+        $results = $this->employeeService->delete($employee->id);
+        // $this->assertEquals($expected, $results);
     }
 }
