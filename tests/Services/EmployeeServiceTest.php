@@ -41,9 +41,6 @@ class EmployeeServiceTest extends TestCase
         parent::tearDown();
     }
 
-    public function initData()
-    { }
-
     public function testServiceIndexSuccess()
     {
         $employees = factory(\App\Models\Employee::class, 10)->create();
@@ -106,8 +103,8 @@ class EmployeeServiceTest extends TestCase
         ];
 
         $this->expectException("Exception");
-        $this->expectExceptionCode(204);
-        $this->employeeRepository->shouldReceive('create')->with($data)->andThrow(new \Exception, 204)->andReturn(false);        
+        $this->expectExceptionCode(422);
+        $this->employeeRepository->shouldReceive('create')->with($data)->andThrow(new \Exception, 422)->andReturn(false);        
         $results = $this->employeeService->create($data);
     }
 

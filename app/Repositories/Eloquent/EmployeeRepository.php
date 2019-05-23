@@ -53,7 +53,7 @@ class EmployeeRepository implements RepositoryInterface
         $validator = Validator::make($data, Employee::$ruleEmployee, Employee::$messageEmployee);
         if ($validator->fails()) {
             $message = $validator->messages()->getMessages();
-            throw new \Exception(json_encode($message), 204);
+            throw new \Exception(json_encode($message), 422);
         }
         $employee = $this->model->create($data);
 

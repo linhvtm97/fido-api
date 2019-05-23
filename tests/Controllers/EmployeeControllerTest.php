@@ -58,7 +58,7 @@ class EmployeeControllerTest extends TestCase
         $employees = array();
         $this->employeeService->shouldReceive('all')->andReturn($employees);
         $response = $this->call('GET', $this->urlApi);
-        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
     }
 
     public function testControllerCreateEmployeeSuccess()
@@ -105,9 +105,9 @@ class EmployeeControllerTest extends TestCase
             'tax_number' => 'DN:' . $this->faker->text($max = 100),
             'active_check' => 1,
         ];
-        $this->employeeService->shouldReceive('create')->once()->with($data)->andThrow(new \Exception(), 202);
+        $this->employeeService->shouldReceive('create')->once()->with($data)->andThrow(new \Exception(), 422);
         $response = $this->call('POST', $this->urlApi, $data);
-        $this->assertEquals(Response::HTTP_ACCEPTED, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_UNPROCESSABLE_ENTITY, $response->getStatusCode());
     }
 
     public function testControllerUpdateEmployeeSuccess()
@@ -138,7 +138,7 @@ class EmployeeControllerTest extends TestCase
         $employee = factory(\App\Models\Employee::class)->create();
         $this->employeeService->shouldReceive('delete')->once()->andReturn(200);
         $response = $this->call('DELETE', $this->urlApi . $employee->id);
-        $this->assertEquals(Response::HTTP_ACCEPTED, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
     public function testControllerDeleteEmployeeFailWithIDNotFound()
     {

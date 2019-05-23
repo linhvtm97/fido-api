@@ -17,16 +17,7 @@ class EmployeeRepositoryTest extends TestCase
         parent::setUp();
         $this->employeeRepository = App::make(EmployeeRepository::class);
         $this->faker = Faker\Factory::create();
-        $this->initData();
     }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-    }
-
-    public function initData()
-    { }
 
     public function testRepositoryIndexSuccess()
     {
@@ -85,7 +76,7 @@ class EmployeeRepositoryTest extends TestCase
         ];
 
         $this->expectException("Exception");
-        $this->expectExceptionCode(204);
+        $this->expectExceptionCode(422);
         $results = $this->employeeRepository->create($data);
     }
 

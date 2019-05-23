@@ -29,10 +29,7 @@ class EmployeeController extends Controller
     public function index()
     {
         $employees = $this->employeeService->all();
-        if (!$employees) {
-            return response()->json(['Message' => 'No content'], 204);
-        }
-        return response()->json(['Message' => 'Success', 'Data' => $employees], 200);
+        return response()->json(['message' => 'Success', 'data' => $employees], 200);
     }
 
     /**
@@ -54,9 +51,9 @@ class EmployeeController extends Controller
         try {
             $this->employeeService->create($request->all());
         } catch (\Exception $th) {
-            return response()->json(['Message' => $th->getMessage()], 202);
+            return response()->json(['message' => $th->getMessage()], 422);
         }
-        return response()->json(['Message' => 'Created'], 201);
+        return response()->json(['message' => 'Created'], 201);
     }
 
     /**
@@ -70,9 +67,9 @@ class EmployeeController extends Controller
         try {
             $employee = $this->employeeService->find($id);
         } catch (\Exception $th) {
-            return response()->json(['Message' => $th->getMessage()], 404);
+            return response()->json(['message' => $th->getMessage()], 404);
         }
-        return response()->json(['Message' => 'Success', 'Data' => $employee], 200);
+        return response()->json(['message' => 'Success', 'data' => $employee], 200);
     }
 
     /**
@@ -98,9 +95,9 @@ class EmployeeController extends Controller
         try {
             $this->employeeService->update($request->all(), $id);
         } catch (\Exception $th) {
-            return response()->json(['Message' => $th->getMessage()], 404);
+            return response()->json(['message' => $th->getMessage()], 404);
         }
-        return response()->json(['Message' => 'Updated'], 200);
+        return response()->json(['message' => 'Updated'], 200);
     }
 
     /**
@@ -114,8 +111,8 @@ class EmployeeController extends Controller
         try {
             $this->employeeService->delete($id);
         } catch (\Exception $th) {
-            return response()->json(['Message' => $th->getMessage()], 404);
+            return response()->json(['message' => $th->getMessage()], 404);
         }
-        return response()->json(['Message' => 'Deleted'], 202);
+        return response()->json(['message' => 'Deleted'], 204);
     }
 }
