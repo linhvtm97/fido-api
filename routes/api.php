@@ -1,8 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-use App\Models\Employee;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,7 +15,4 @@ Route::group(['middleware' => ['api']], function () {
     Route::resource('employees', 'EmployeeController')->except([
         'create', 'edit'
     ]);
-    // Route::get('employees', function() {
-    //     return Employee::all();
-    // });
 });

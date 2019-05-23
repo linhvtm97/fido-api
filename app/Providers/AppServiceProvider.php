@@ -3,6 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Repositories\Interfaces\RepositoryInterface;
+use App\Repositories\Eloquent\EmployeeRepository;
+use App\Services\Eloquent\EmployeeService;
+use App\Services\Interfaces\EmployeeServiceInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,12 +18,12 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(
-            'App\Repositories\Interfaces\RepositoryInterface',
-            'App\Repositories\Eloquent\EmployeeRepository'
+            RepositoryInterface::class,
+            EmployeeRepository::class
         );
         $this->app->bind(
-            'App\Services\Interfaces\EmployeeServiceInterface',
-            'App\Services\Eloquent\EmployeeService'
+            EmployeeServiceInterface::class,
+            EmployeeService::class
         );
     }
 

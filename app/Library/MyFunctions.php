@@ -4,6 +4,7 @@ namespace App\Library;
 
 use App\Doctor;
 use Faker\Provider\ka_GE\DateTime;
+use App\Models\Employee;
 
 class MyFunctions
 {
@@ -15,11 +16,12 @@ class MyFunctions
             $rowData[] = fgetcsv($fileD);
         }
         foreach ($rowData as $key => $value) {
-
             $inserted_data = array(
-                'name' => $value[0],
+                'code' => $value[0],
+                'name' => $value[1],
+                
             );
-            $model::create($inserted_data);
+            $model::create($inserted_data);  
         }
         print_r($rowData);
     }
