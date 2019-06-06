@@ -30,6 +30,6 @@ jobs: # a collection of steps
           key: node-v1-{{ checksum "package.json" }}
           paths:
             - node_modules
-      - run: php artisan migrate
+      - run: php artisan migrate --force
       - run: ./vendor/bin/codecept build
       - run: ./vendor/bin/codecept run
