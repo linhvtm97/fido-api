@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTitleToDoctorsTable extends Migration
+class AddRatingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class AddTitleToDoctorsTable extends Migration
      */
     public function up()
     {
+        Schema::table('ratings', function (Blueprint $table) {
+            $table->renameColumn('likes', 'like')->default(1)->change();
+        });
         Schema::table('doctors', function (Blueprint $table) {
-            $table->string('title')->default('doctor');
-            $table->string('experience')->nullable()->change();
-            $table->string('description')->nullable()->change();
+            $table->integer('likes')->nullable()->default(100);
         });
     }
 
@@ -27,8 +28,6 @@ class AddTitleToDoctorsTable extends Migration
      */
     public function down()
     {
-        Schema::table('doctors', function (Blueprint $table) {
-            //
-        });
+        //
     }
 }

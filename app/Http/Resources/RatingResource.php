@@ -18,10 +18,15 @@ class RatingResource extends JsonResource
             'id' => $this->id,
             'star' => $this->star,
             'review' => $this->review,
-            'doctor_id' => $this->doctor_id,
-            'patient_name' => $this->patient_name,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'doctor_id' => empty($this->doctor) ? null : $this->doctor->id,
+            'doctor_name' => empty($this->doctor) ? null : $this->doctor->name,
+            'patient_id' => empty($this->patient) ? null : $this->patient->id,
+            'patient_name' => empty($this->patient) ? null : $this->patient->name,
+            'patient_avatar' => empty($this->patient) ? null : $this->patient->avatar,
+            'like' => empty($this->like) ? 0 : $this->like,
+            'report' => empty($this->report) ? 0 : $this->report,
+            'created_at' => date_format($this->created_at, 'Y-m-d H:i:s'),
+            'updated_at' => date_format($this->updated_at, 'Y-m-d H:i:s'),
         ];
     }
 }

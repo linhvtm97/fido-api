@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTableEmployee extends Migration
+class EditQuestion extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class UpdateTableEmployee extends Migration
      */
     public function up()
     {
-        Schema::table('employees', function (Blueprint $table) {
-            $table->integer('phone_number')->nullable();
+        Schema::create('questions', function (Blueprint $table) {
+            $table->integer('role')->default(0);
         });
     }
 
@@ -25,6 +25,6 @@ class UpdateTableEmployee extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('questions');
     }
 }

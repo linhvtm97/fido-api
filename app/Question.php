@@ -4,9 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Rating extends Model
+class Question extends Model
 {
-    protected $fillable = ['star', 'like', 'report','patient_id', 'doctor_id', 'review','patient_avatar', 'patient_name'];
+    protected $fillable = [
+        'question_content', 'answer', 'patient_id', 'doctor_id',  'created_at', 'updated_at'
+    ];
 
     public function doctor()
     {

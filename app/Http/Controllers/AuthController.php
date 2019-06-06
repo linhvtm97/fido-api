@@ -16,7 +16,7 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             $message = $validator->messages()->getMessages();
-            return response()->json([$message, 'status_code' => 403], 403);
+            return response()->json(['message'=>$message, 'status_code' => 202], 202);
         }
         $data = $request->all();
         $user = User::create($data);
@@ -25,8 +25,10 @@ class AuthController extends Controller
         $model_name = $user->usable_type;
         $role = $model_name::create($data);
         $user->usable_id = $role->id;
-        if($model_name=='App\\Doctor'){
+        if ($model_name == 'App\\Doctor') {
             $role->actived = 0;
+            $role->doctor_no = 'BS' . $role->id;
+            $role->email = $user->email;
             $role->save();
         }
         $user->save();
@@ -48,7 +50,10 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
 
         if (!$token = auth()->attempt($credentials)) {
-            return response()->json(['status_code' => 'FAIL'], 401);
+            return response()->json([
+                'status_code' => 202,
+                'message' => 'Email or password is incorrect'
+            ], 202);
         }
         $user = User::where('email', $request['email'])->first();
         return $this->respondWithToken($token, $user);
@@ -56,21 +61,24 @@ class AuthController extends Controller
 
     public function logout()
     {
-        auth()->logout();
-
-        return response()->json(['status_code' => 200]);
+        try {
+            auth()->logout();
+            return response()->json(['status_code' => 200]);
+        } catch (\Exception $ex) {
+            return response()->json(['message' => 'Token has been expired'], 404);
+        }
     }
 
     protected function respondWithToken($token, $user)
     {
         return response()->json([
+            'status_code' => 200,
             'access_token' => $token,
             'token_type'   => 'bearer',
             'expires_in'   => auth()->factory()->getTTL() * 60,
             'data' => AuthController::responseWithUser($user),
-            'status_code' => 'PASS',
             'usable_type' => $user->usable_type,
             'usable_id' => $user->usable_id,
-        ]);
+        ], 200);
     }
 }

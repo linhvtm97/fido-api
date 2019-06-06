@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTitleToDoctorsTable extends Migration
+class AddDefaultRatingDoctors extends Migration
 {
     /**
      * Run the migrations.
@@ -14,9 +14,7 @@ class AddTitleToDoctorsTable extends Migration
     public function up()
     {
         Schema::table('doctors', function (Blueprint $table) {
-            $table->string('title')->default('doctor');
-            $table->string('experience')->nullable()->change();
-            $table->string('description')->nullable()->change();
+            $table->float('rating')->default(2.5)->change();
         });
     }
 
@@ -27,8 +25,6 @@ class AddTitleToDoctorsTable extends Migration
      */
     public function down()
     {
-        Schema::table('doctors', function (Blueprint $table) {
-            //
-        });
+        //
     }
 }

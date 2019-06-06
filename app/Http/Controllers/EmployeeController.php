@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Library\MyValidation;
+use App\Http\Resources\MyCollection;
+use App\Employee;
+use App\Http\Resources\EmployeeCollection;
 
 class EmployeeController extends Controller
 {
@@ -14,7 +17,15 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        return MyController::index('App\\Employee');
+        $results = Employee::with('address')->orderBy('id', 'asc')->get();
+        if (!$results->isEmpty()) {
+            return response()->json([
+                'status_code' => 200, 'data' => new EmployeeCollection($results)
+            ], 200);
+        }
+        return response()->json([
+            'status_code' => 204, 'message' => 'No content'
+        ], 204);
     }
 
     /**

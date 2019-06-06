@@ -43,7 +43,7 @@ class UserController extends Controller
 
         if ($validator->fails()) {
             $message = $validator->messages()->getMessages();
-            return response()->json(["data" => $message, 'status_code' => 'FAIL'], 401);
+            return response()->json(["message" => $message, 'status_code' => 401 ], 401);
         }
         $data = $request->all();
         $user = User::create($data);

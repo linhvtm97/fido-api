@@ -3,6 +3,7 @@
 namespace App\Library;
 
 use App\Doctor;
+use Faker\Provider\ka_GE\DateTime;
 
 class MyFunctions
 {
@@ -44,12 +45,18 @@ class MyFunctions
         $url = $pms["data"]["link"];
         return $url;
     }
-    public static function updateRating($star, $doctor_id)
+    public static function updateRating($star, $like, $doctor_id)
     {
         $doctor = Doctor::findOrFail($doctor_id);
         if ($doctor) {
             $doctor->rating = ($doctor->rating + $star) / 2;
+            $doctor->likes += $like == null ? 0 : $like;
             $doctor->save();
         } else return response()->json(['status_code' => 401]);
+    }
+
+    public static function countAge($birthDate)
+    {
+        return date_diff(date_create($birthDate), date_create('now'))->y;
     }
 }

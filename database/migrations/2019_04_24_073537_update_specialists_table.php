@@ -14,8 +14,8 @@ class UpdateSpecialistsTable extends Migration
     public function up()
     {
         Schema::table('doctors', function (Blueprint $table) {
-            // $table->integer('address_id')->nullable()->change();
-            // $table->integer('specialist_id')->nullable()->change();
+            $table->integer('address_id')->nullable()->change();
+            $table->integer('specialist_id')->nullable()->change();
         });
     }
 

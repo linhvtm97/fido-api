@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Validator;
 use App\Library\MyValidation;
 use DB;
+use App\Http\Resources\PatientResource;
+use App\Patient;
+use App\Http\Resources\PatientCollection;
 
 class PatientController extends Controller
 {
@@ -16,7 +19,15 @@ class PatientController extends Controller
      */
     public function index()
     {
-        return MyController::index('App\\Patient');
+        $results = Patient::with('address', 'questions', 'ratings')->orderBy('id', 'asc')->get();
+        if ($results) {
+            return response()->json([
+                'status_code' => 200, 'data' => new PatientCollection($results)
+            ], 200);
+        }
+        return response()->json([
+            'status_code' => 204
+        ], 204);
     }
 
     /**
@@ -48,7 +59,11 @@ class PatientController extends Controller
      */
     public function show($id)
     {
-        return MyController::show('App\\Patient', $id);
+        $patient = Patient::with('address', 'ratings', 'questions')->find($id);
+        if ($patient) {
+            return response()->json(['status_code' => 200, 'data' => new PatientResource($patient)], 200);
+        }
+        return response()->json(['status_code' => 404, 'message' => 'ID not found'], 404);
     }
 
     /**

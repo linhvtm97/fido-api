@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTableEmployee extends Migration
+class AddRoleEmployeesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class UpdateTableEmployee extends Migration
     public function up()
     {
         Schema::table('employees', function (Blueprint $table) {
-            $table->integer('phone_number')->nullable();
+            $table->integer('role')->default(0);
         });
     }
 

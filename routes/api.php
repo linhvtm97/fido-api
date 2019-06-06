@@ -4,6 +4,12 @@ use App\Address;
 use App\Http\Resources\MyResource;
 use App\Http\Resources\DoctorCollection;
 use App\Doctor;
+use App\Http\Resources\MyCollection;
+use App\Http\Resources\RatingCollection;
+use App\Rating;
+use App\Http\Resources\QuestionCollection;
+use App\Question;
+use App\Certificate;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +29,8 @@ Route::group(['middleware' => ['cors', 'api']], function () {
     Route::post('/login', 'AuthController@login');
 
     Route::post('/logout', 'AuthController@logout');
+
+    Route::put('/reset-password', 'ResetPasswordController@reset');
 
     Route::resource('users', 'UserController')->except([
         'create', 'edit'
@@ -44,11 +52,13 @@ Route::group(['middleware' => ['cors', 'api']], function () {
         'create', 'edit'
     ]);
 
-
     Route::resource('doctors.ratings', 'RatingDoctorController')->except([
         'create', 'edit'
     ]);
 
+    Route::resource('doctors.questions', 'DoctorQuestionController')->except([
+        'create', 'edit'
+    ]);
 
     Route::resource('admins', 'AdminController')->except([
         'create', 'edit'
@@ -64,5 +74,30 @@ Route::group(['middleware' => ['cors', 'api']], function () {
 
     Route::get('doctors-pagination', function () {
         return new DoctorCollection(Doctor::with('address', 'specialist', 'sub_specialist', 'employee', 'ratings')->where('actived', '=', 1)->orderBy('id', 'asc')->paginate(10));
+    });
+
+    Route::prefix('/patients')->group(function () {
+        Route::post('/search', 'SearchController@searchPatient');
+    });
+
+    Route::get('/ratings/reported', function () {
+        return new RatingCollection(Rating::where('report', '=', 1)->orderBy('id', 'asc')->get());
+    });
+    Route::prefix('/employees')->group(function () {
+        Route::post('/search', 'SearchController@searchEmployee');
+    });
+
+    Route::prefix('/doctors')->group(function () {
+        Route::post('/search', 'SearchController@search');
+    });
+
+    Route::get('/ratings/all', function () {
+        return new RatingCollection(Rating::all());
+    });
+    Route::get('/certificates/all', function () {
+        return new MyResource(Certificate::all());
+    });
+    Route::get('/questions/all', function () {
+        return new MyResource(Question::all());
     });
 });

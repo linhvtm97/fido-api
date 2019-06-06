@@ -17,7 +17,16 @@ class DoctorController extends Controller
      */
     public function index()
     {
-        return new DoctorCollection(Doctor::with('address', 'specialist', 'sub_specialist', 'employee', 'ratings')->where('actived', '=', 1)->orderBy('id', 'asc')->get());
+        $results = Doctor::with('address', 'specialist', 'sub_specialist', 'employee', 'ratings')->orderBy('id', 'asc')->get();
+        if ($results) {
+            return response()->json([
+                'status_code' => 200, 'data' => new DoctorCollection($results)
+            ], 200);
+        }
+        return response()->json([
+            'status_code' => 204,
+            'message' => 'no content'
+        ], 204);
     }
 
     /**
